@@ -81,7 +81,6 @@
 (def unlock 0)
 
 ; timeout
-(define secs-left 0)
 (define last-action-time (systime))
 
 ;cruise
@@ -150,13 +149,11 @@
         (if (= (+ lock off) 0) ; it is locked and off?
             {
                 (app-adc-override 3 0) ; disable cruise button
+                (set 'unlock 0) ; Disable unlock on turn off
                 (apply-mode)
-                (set 'break-light-enabled 0)  ; disable break light
-                (disable_brake)
+                (set 'off 1) ; turn off
                 (set 'light 0) ; turn off light
                 (beep 2 1) ; beep feedback
-                (set 'secs-left 0)
-                (set 'off 1) ; turn off
             }
         )
     }
@@ -230,9 +227,6 @@
                     (if (> brake min-adc-brake)
                             (setvar 'last-action-time (systime))
                     )
-                )
-                (if (= off 0)
-                    (setvar 'secs-left (secs-since last-action-time))
                 )
             }
         )
