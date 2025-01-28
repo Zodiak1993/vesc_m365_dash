@@ -273,7 +273,7 @@
         
         ; beep field
         (if (= lock 1)
-            (if (> current-speed min-speed)
+            (if (> (abs current-speed) min-speed)
                 (bufset-u8 tx-frame 9 1) ; beep lock
                 (bufset-u8 tx-frame 9 0))
             (if (> feedback 0)
