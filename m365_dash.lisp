@@ -79,26 +79,85 @@
 
 (defun adc-input(buffer) ; Frame 0x65
     {
-        (let ((current-speed (* (get-speed) 3.6))
-            (throttle (/(bufget-u8 uart-buf 4) 77.2)) ; 255/3.3 = 77.2
-            (brake (/(bufget-u8 uart-buf 5) 77.2)))
+        (set 'last-throttle-dead-min (- thr cruise-dead-zone))
+        (set 'last-throttle-dead-max (+ thr cruise-dead-zone))
+        (set 'brake (/(bufget-u8 uart-buf 5) 77.2))
+        (set 'thr (/(bufget-u8 uart-buf 4) 77.2))
+        (set 'real-thr-pos (/(bufget-u8 uart-buf 4) 77.2))
+
+        (if (<= thr min-adc-thr)
+            (setvar 'last-throttle-updated-at-time (systime))
+        )
+
+        (if (>= thr last-throttle-dead-max)
+            (setvar 'last-throttle-updated-at-time (systime))
+        )
+
+        (if (<= thr last-throttle-dead-min)
+            (setvar 'last-throttle-updated-at-time (systime))
+        )
+
+        (if (>= brake min-adc-brake)
             {
-                (if (< throttle 0)
-                    (setf throttle 0))
-                (if (> throttle 3.3)
-                    (setf throttle 3.3))
+                (disable-cruise)
+                (set 'thr 0)
+            }
+        )
+
+        (if (= cruise-enabled 1)
+            (if (< last-throttle-dead-min min-adc-thr)
+                (if (> thr min-adc-thr)
+                    (disable-cruise)
+                )
+            )
+        )
+
+        (let ((current-speed (* (get-speed) 3.6))) ; 255/3.3 = 77.2
+
+            {
+                (if (< thr 0)
+                    (setf thr 0))
+                (if (> thr 3.3)
+                    (setf thr 3.3))
                 (if (< brake 0)
                     (setf brake 0))
                 (if (> brake 3.3)
                     (setf brake 3.3))
-                
+
                 ; Pass through throttle and brake to VESC
-                (app-adc-override 0 throttle)
+                (app-adc-override 0 thr)
                 (app-adc-override 1 brake)
+
+                ; time-out
+                (if (= off 0)
+                    (if (> thr min-adc-thr)
+                            (setvar 'last-action-time (systime))
+                    )
+                )
+
+                (if (= off 0)
+                    (if (> current-speed 1)
+                            (setvar 'last-action-time (systime))
+                    )
+                )
+
+                 (if (= off 0)
+                    (if (> brake min-adc-brake)
+                            (setvar 'last-action-time (systime))
+                    )
+                )
+                (if (= off 0)
+                    (setvar 'secs-left (secs-since last-action-time))
+                )
             }
+        )
+
+        (if (and (!= cruise-enabled 1) (> (secs-since last-throttle-updated-at-time) cruise-after-sec) (> (* (get-speed) 3.6) min-speed))
+            (enable-cruise thr)
         )
     }
 )
+
 
 (defun handle-features()
     {
@@ -109,21 +168,18 @@
                     (app-adc-override 1 0)
                     (app-disable-output -1)
                     (set-current 0)
-                    ;(loopforeach i (can-list-devs)
-                    ;    (canset-current i 0)
-                    ;)
                 }
-                
+
             )
             (if (app-is-output-disabled) ; Enable output when scooter is turned on
                 (app-disable-output 0)
             )
         )
-        
+
         (if (= lock 1)
             {
                 (set-current-rel 0) ; No current input when locked
-                (if (> (* (get-speed) 3.6) min-speed)
+                (if (> (abs (* (get-speed) 3.6)) min-speed)
                     (set-brake-rel 1) ; Full power brake
                     (set-brake-rel 0) ; No brake
                 )
