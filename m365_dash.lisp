@@ -1,7 +1,9 @@
-; M365 dashboard compability lisp script v1.0 by Netzpfuscher and 1zuna
+; M365 dashboard compability lisp script
 ; UART Wiring: red=5V black=GND yellow=COM-TX (UART-HDX) green=COM-RX (button)+3.3V with 1K Resistor
-; Guide (German): https://rollerplausch.com/threads/vesc-controller-einbau-1s-pro2-g30.6032/
- 
+; Tested on VESC 6.05 using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
+; Edited by Zodiak: Thanks to AKA13, 1zuna and sharkboy for original script!
+
+
 ; -> User parameters (change these to your needs)
 (def software-adc 1)
 (def debounce-time 0.025)
