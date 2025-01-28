@@ -551,6 +551,7 @@
 
 ; Apply mode on start-up
 (apply-mode)
+(turn-on-ble)
 
 ; Spawn UART reading frames thread
 (spawn 150 read-frames)
