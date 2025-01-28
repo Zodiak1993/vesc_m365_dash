@@ -376,13 +376,13 @@
     (if (= presses 1) ; single press
         (if (= off 1) ; is it off? turn on scooter again
             {
-                (set 'off 0) ; turn on
-                (set 'feedback 1) ; beep feedback
-                (set 'unlock 0) ; Disable unlock on turn off
-                (apply-mode) ; Apply mode on start-up
-                (stats-reset) ; reset stats when turning on
+                (turn-on-ble)
             }
-            (set 'light (bitwise-xor light 1)) ; toggle light
+            {
+                (if (= lock 0)
+                    (set 'light (bitwise-xor light 1)) ; toggle light
+                )
+            }
         )
         (if (>= presses 2) ; double press
             {
@@ -390,14 +390,14 @@
                     (if (and (= secret-enabled 1) (> (get-adc-decoded 0) min-adc-throttle))
                         {
                             (set 'unlock (bitwise-xor unlock 1))
-                            (set 'feedback 2) ; beep 2x
+                            (beep 1 2) ; beep 2x
                             (apply-mode)
                         }
                         {
                             (set 'unlock 0)
                             (apply-mode)
                             (set 'lock (bitwise-xor lock 1)) ; lock on or off
-                            (set 'feedback 1) ; beep feedback
+                            (beep 1 1) ; beep feedback
                         }
                     )
                     {
