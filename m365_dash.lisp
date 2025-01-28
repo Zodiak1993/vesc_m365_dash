@@ -4,8 +4,10 @@
  
 ; -> User parameters (change these to your needs)
 (def software-adc 1)
-(def min-adc-throttle 0.1)
-(def min-adc-brake 0.1)
+(def min-adc-throttle 0.5)
+(def min-adc-brake 0.5)
+(def vesc-high-temp 85)
+(def mot-high-temp 120)
 
 (def show-batt-in-idle 1)
 (def min-speed 1)
@@ -16,14 +18,17 @@
 (def eco-current 0.6)
 (def eco-watts 400)
 (def eco-fw 0)
+
 (def drive-speed (/ 17 3.6))
 (def drive-current 0.7)
 (def drive-watts 500)
 (def drive-fw 0)
+
 (def sport-speed (/ 21 3.6))
 (def sport-current 1.0)
 (def sport-watts 700)
 (def sport-fw 0)
+
 
 ; Secret speed modes. To enable, press the button 2 times while holding break and throttle at the same time.
 (def secret-enabled 1)
@@ -31,10 +36,12 @@
 (def secret-eco-current 0.8)
 (def secret-eco-watts 1200)
 (def secret-eco-fw 0)
+
 (def secret-drive-speed (/ 47 3.6))
 (def secret-drive-current 0.9)
 (def secret-drive-watts 1500)
 (def secret-drive-fw 0)
+
 (def secret-sport-speed (/ 1000 3.6)) ; 1000 km/h easy
 (def secret-sport-current 1.0)
 (def secret-sport-watts 1500000)
@@ -76,6 +83,36 @@
     (app-adc-detach 3 1)
     (app-adc-detach 3 0)
 )
+
+(defun beep(time count)
+    {
+        (set 'beep-time time)
+        (set 'feedback count)
+    }
+)
+
+(defun disable-cruise()
+    (if (= cruise-enabled 1)
+        {
+            (setvar 'cruise-enabled 0)
+            (app-adc-override 3 0)
+        }
+    )
+)
+
+
+(defun enable-cruise(thr)
+    (if (> (get-speed) min-speed)
+        {
+            (setvar 'cruise-enabled 1)
+            (app-adc-override 3 thr)
+            ;(set 'light-times 6)
+            (beep 2 2)
+        }
+    )
+)
+
+
 
 (defun adc-input(buffer) ; Frame 0x65
     {
