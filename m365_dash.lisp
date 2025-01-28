@@ -80,6 +80,10 @@
 (def light 0)
 (def unlock 0)
 
+; timeout
+(define secs-left 0)
+(define last-action-time (systime))
+
 ;cruise
 (def last-throttle-updated-at-time (systime))
 (def last-throttle-dead-min 0)
