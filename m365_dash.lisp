@@ -6,10 +6,10 @@
 (def software-adc 1)
 (def debounce-time 0.025)
 
-(def min-adc-throttle 0.5)
+(def min-adc-throttle 0.1)
 (def max-adc-throttle 0.9)
 
-(def min-adc-brake 0.5)
+(def min-adc-brake 0.1)
 (def max-adc-brake 0.9)
 
 (def vesc-high-temp 85)
