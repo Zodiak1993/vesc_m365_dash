@@ -416,11 +416,12 @@
     {
         (if (= (+ lock off) 0) ; it is locked and off?
             {
+                (app-adc-override 3 0) ; disable cruise button
                 (set 'unlock 0) ; Disable unlock on turn off
                 (apply-mode)
                 (set 'off 1) ; turn off
                 (set 'light 0) ; turn off light
-                (set 'feedback 1) ; beep feedback
+                (beep 2 1) ; beep feedback
             }
         )
     }
