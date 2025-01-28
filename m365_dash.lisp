@@ -132,7 +132,36 @@
     )
 )
 
+(defun turn-on-ble()
+    {
+        (app-adc-override 3 0) ; disable cruise button
+        (set 'speedmode 2)
+        (set 'break-light-enabled 1)
+        (enable_brake)
+        (apply-mode) ; Apply mode on start-up
+        (set 'last-action-time (systime))
+        (beep 1 1)
+        (set 'off 0) ; turn on
+    }
+)
 
+
+(defun shut-down-ble()
+    {
+        (if (= (+ lock off) 0) ; it is locked and off?
+            {
+                (app-adc-override 3 0) ; disable cruise button
+                (apply-mode)
+                (set 'break-light-enabled 0)  ; disable break light
+                (disable_brake)
+                (set 'light 0) ; turn off light
+                (beep 2 1) ; beep feedback
+                (set 'secs-left 0)
+                (set 'off 1) ; turn off
+            }
+        )
+    }
+)
 
 (defun adc-input(buffer) ; Frame 0x65
     {
