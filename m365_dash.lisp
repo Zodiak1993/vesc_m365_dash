@@ -4,8 +4,14 @@
  
 ; -> User parameters (change these to your needs)
 (def software-adc 1)
+(def debounce-time 0.025)
+
 (def min-adc-throttle 0.5)
+(def max-adc-throttle 0.9)
+
 (def min-adc-brake 0.5)
+(def max-adc-brake 0.9)
+
 (def vesc-high-temp 85)
 (def mot-high-temp 120)
 
@@ -29,9 +35,9 @@
 (def sport-watts 700)
 (def sport-fw 0)
 
-
-; Secret speed modes. To enable, press the button 2 times while holding break and throttle at the same time.
+; Secret speed modes. To enable press the button 2 times while holding break and throttle at the same time.
 (def secret-enabled 1)
+
 (def secret-eco-speed (/ 27 3.6))
 (def secret-eco-current 0.8)
 (def secret-eco-watts 1200)
@@ -48,6 +54,7 @@
 (def secret-sport-fw 10)
 
 ; -> Code starts here (DO NOT CHANGE ANYTHING BELOW THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING)
+;##################################################################################################
 
 ; Load VESC CAN code serer
 (import "pkg@://vesc_packages/lib_code_server/code_server.vescpkg" 'code-server)
@@ -63,21 +70,30 @@
 (def uart-buf (array-create 64))
 
 ; Button handling
-
 (def presstime (systime))
 (def presses 0)
 
 ; Mode states
-
 (def off 0)
 (def lock 0)
 (def speedmode 4)
 (def light 0)
 (def unlock 0)
 
-; Sound feedback
+;cruise
+(def last-throttle-updated-at-time (systime))
+(def last-throttle-dead-min 0)
+(def last-throttle-dead-max 0)
+(def cruise-after-sec 5)
+(def cruise-dead-zone 0.1)
+(def cruise-enabled 0)
+(def thr 0)
+(def real-thr-pos 0)
+(def light-times 0)
 
+; Sound feedback
 (def feedback 0)
+(def beep-time 1)
 
 (if (= software-adc 1)
     (app-adc-detach 3 1)
