@@ -93,7 +93,7 @@
 (def cruise-enabled 0)
 (def thr 0)
 (def real-thr-pos 0)
-(def light-times 0)
+;(def light-times 0) needed?
 
 ; Sound feedback
 (def feedback 0)
