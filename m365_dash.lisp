@@ -135,13 +135,12 @@
 (defun turn-on-ble()
     {
         (app-adc-override 3 0) ; disable cruise button
-        (set 'speedmode 2)
-        (set 'break-light-enabled 1)
-        (enable_brake)
-        (apply-mode) ; Apply mode on start-up
-        (set 'last-action-time (systime))
-        (beep 1 1)
         (set 'off 0) ; turn on
+        (beep 1 1)
+        (set 'unlock 0) ; Disable unlock on turn off
+        (apply-mode) ; Apply mode on start-up
+        (stats-reset) ; reset stats when turning on
+        (set 'last-action-time (systime)) ;???????????????????????????????? needed ?????????????
     }
 )
 
@@ -418,7 +417,7 @@
     )
 )
 
-(defun handle-holding-button()
+(defun shut-down-ble()
     {
         (if (= (+ lock off) 0) ; it is locked and off?
             {
@@ -539,7 +538,7 @@
                 (if (> time-passed 6000) ; long press after 6000 ms
                     {
                         (if is-active
-                            (handle-holding-button)
+                             (shut-down-ble)
                         )
                         (reset-button) ; reset button
                     }
