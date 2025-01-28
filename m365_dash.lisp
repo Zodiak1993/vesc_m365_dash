@@ -84,7 +84,7 @@
 (def unlock 0)
 
 ; timeout
-(define last-action-time (systime))
+;(define last-action-time (systime))
 
 ;cruise
 (def last-throttle-updated-at-time (systime))
@@ -209,26 +209,8 @@
                 ; Pass through throttle and brake to VESC
                 (app-adc-override 0 thr)
                 (app-adc-override 1 brake)
-
-                ; time-out
-                (if (= off 0)
-                    (if (> thr min-adc-thr)
-                            (setvar 'last-action-time (systime))
-                    )
-                )
-
-                (if (= off 0)
-                    (if (> current-speed 1)
-                            (setvar 'last-action-time (systime))
-                    )
-                )
-
-                 (if (= off 0)
-                    (if (> brake min-adc-brake)
-                            (setvar 'last-action-time (systime))
-                    )
-                )
-            }
+             
+           }
         )
 
         (if (and (= cruise-control 1) (= unlock 1) (!= cruise-enabled 1) (> (secs-since last-throttle-updated-at-time) cruise-after-sec) (> (* (get-speed) 3.6) min-speed))
