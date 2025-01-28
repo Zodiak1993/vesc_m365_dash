@@ -501,7 +501,7 @@
         (loopwhile t
             {
                 (var button (gpio-read 'pin-rx))
-                (sleep 0.05) ; wait 50 ms to debounce
+                (sleep debounce-time) ; wait to debounce
                 (var buttonconfirm (gpio-read 'pin-rx))
                 (if (not (= button buttonconfirm))
                     (set 'button 0)
