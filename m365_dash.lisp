@@ -16,6 +16,7 @@
 (def mot-high-temp 120)
 
 (def show-batt-in-idle 1)
+(def cruise-control 1)
 (def min-speed 1)
 (def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
 
@@ -231,7 +232,7 @@
             }
         )
 
-        (if (and (!= cruise-enabled 1) (> (secs-since last-throttle-updated-at-time) cruise-after-sec) (> (* (get-speed) 3.6) min-speed))
+        (if (and (= cruise-control 1) (= unlock 1) (!= cruise-enabled 1) (> (secs-since last-throttle-updated-at-time) cruise-after-sec) (> (* (get-speed) 3.6) min-speed))
             (enable-cruise thr)
         )
     }
