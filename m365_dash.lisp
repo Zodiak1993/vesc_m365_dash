@@ -164,7 +164,7 @@
         (set 'last-throttle-dead-min (- thr cruise-dead-zone))
         (set 'last-throttle-dead-max (+ thr cruise-dead-zone))
         (set 'brake (/(bufget-u8 uart-buf 5) 77.2))
-        (set 'real-thr-pos (/(bufget-u8 uart-buf 4) 77.2))
+        (set 'thr (/(bufget-u8 uart-buf 4) 77.2))
 
         (if (<= thr min-adc-thr)
             (setvar 'last-throttle-updated-at-time (systime))
