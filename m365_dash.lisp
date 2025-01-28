@@ -94,7 +94,6 @@
 (def cruise-dead-zone 0.1)
 (def cruise-enabled 0)
 (def thr 0)
-(def real-thr-pos 0)
 
 ; Sound feedback
 (def feedback 0)
@@ -164,7 +163,6 @@
         (set 'last-throttle-dead-min (- thr cruise-dead-zone))
         (set 'last-throttle-dead-max (+ thr cruise-dead-zone))
         (set 'brake (/(bufget-u8 uart-buf 5) 77.2))
-        (set 'thr (/(bufget-u8 uart-buf 4) 77.2))
         (set 'real-thr-pos (/(bufget-u8 uart-buf 4) 77.2))
 
         (if (<= thr min-adc-thr)
