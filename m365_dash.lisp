@@ -23,17 +23,17 @@
 (def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
 
 ; Speed modes (km/h, watts, current scale)
-(def eco-speed (/ 7 3.6))
+(def eco-speed (/ 6 3.6))
 (def eco-current 0.6)
 (def eco-watts 400)
 (def eco-fw 0)
 
-(def drive-speed (/ 17 3.6))
+(def drive-speed (/ 16 3.6))
 (def drive-current 0.7)
 (def drive-watts 500)
 (def drive-fw 0)
 
-(def sport-speed (/ 21 3.6))
+(def sport-speed (/ 23 3.6))
 (def sport-current 1.0)
 (def sport-watts 700)
 (def sport-fw 0)
@@ -120,7 +120,6 @@
     )
 )
 
-
 (defun enable-cruise(thr)
     (if (> (get-speed) min-speed)
         {
@@ -130,6 +129,7 @@
         }
     )
 )
+
 
 (defun turn-on-ble()
     {
@@ -157,6 +157,7 @@
         )
     }
 )
+
 
 (defun adc-input(buffer) ; Frame 0x65
     {
@@ -247,6 +248,7 @@
     }
 )
 
+
 (defun update-dash(buffer) ; Frame 0x64
     {
         (var current-speed (* (l-speed) 3.6))
@@ -311,6 +313,7 @@
     }
 )
 
+
 (defun read-frames()
     (loopwhile t
         {
@@ -335,6 +338,7 @@
     )
 )
 
+
 (defun handle-frame(code)
     {
         (if (and (= code 0x65) (= software-adc 1))
@@ -344,6 +348,7 @@
         (update-dash uart-buf)
     }
 )
+
 
 (defun handle-button()
     (if (= presses 1) ; single press
@@ -391,6 +396,7 @@
     )
 )
 
+
 (defun shut-down-ble()
     {
         (if (= (+ lock off) 0) ; it is locked and off?
@@ -406,6 +412,7 @@
     }
 )
 
+
 (defun reset-button()
     {
         (set 'presstime (systime)) ; reset press time again
@@ -414,6 +421,7 @@
 )
 
 ; Speed mode implementation
+
 
 (defun apply-mode()
     (if (= unlock 0)
@@ -438,6 +446,7 @@
     )
 )
 
+
 (defun configure-speed(speed watts current fw)
     {
         (set-param 'max-speed speed)
@@ -446,6 +455,7 @@
         (set-param 'foc-fw-current-max fw)
     }
 )
+
 
 (defun set-param (param value)
     {
@@ -458,6 +468,7 @@
         )
     }
 )
+
 
 (defun l-speed()
     {
@@ -474,6 +485,7 @@
         l-speed
     }
 )
+
 
 (defun button-logic()
     {
@@ -503,6 +515,7 @@
     }
 )
 
+
 (defun button-apply(button)
     {
         (var time-passed (- (systime) presstime))
@@ -530,6 +543,7 @@
         )
     }
 )
+
 
 ; Apply mode on start-up
 (apply-mode)
