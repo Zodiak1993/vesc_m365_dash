@@ -93,7 +93,6 @@
 (def cruise-enabled 0)
 (def thr 0)
 (def real-thr-pos 0)
-;(def light-times 0) needed?
 
 ; Sound feedback
 (def feedback 0)
@@ -126,7 +125,6 @@
         {
             (setvar 'cruise-enabled 1)
             (app-adc-override 3 thr)
-            ;(set 'light-times 6)
             (beep 2 2)
         }
     )
