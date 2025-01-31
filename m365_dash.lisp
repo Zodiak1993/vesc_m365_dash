@@ -8,8 +8,8 @@
 (def software-adc 1)
 (def debounce-time 0.025)
 
-(def min-adc-throttle 0.1)
-(def max-adc-throttle 0.9)
+(def min-adc-thr 0.1)
+(def max-adc-thr 0.9)
 
 (def min-adc-brake 0.1)
 (def max-adc-brake 0.9)
@@ -158,66 +158,28 @@
     }
 )
 
-
 (defun adc-input(buffer) ; Frame 0x65
     {
-        (set 'last-throttle-dead-min (- thr cruise-dead-zone))
-        (set 'last-throttle-dead-max (+ thr cruise-dead-zone))
-        (set 'brake (/(bufget-u8 uart-buf 5) 77.2))
-        (set 'thr (/(bufget-u8 uart-buf 4) 77.2))
-
-        (if (<= thr min-adc-thr)
-            (setvar 'last-throttle-updated-at-time (systime))
-        )
-
-        (if (>= thr last-throttle-dead-max)
-            (setvar 'last-throttle-updated-at-time (systime))
-        )
-
-        (if (<= thr last-throttle-dead-min)
-            (setvar 'last-throttle-updated-at-time (systime))
-        )
-
-        (if (>= brake min-adc-brake)
+        (let ((current-speed (* (get-speed) 3.6))
+            (throttle (/(bufget-u8 uart-buf 4) 77.2)) ; 255/3.3 = 77.2
+            (brake (/(bufget-u8 uart-buf 5) 77.2)))
             {
-                (disable-cruise)
-                (set 'thr 0)
-            }
-        )
-
-        (if (= cruise-enabled 1)
-            (if (< last-throttle-dead-min min-adc-thr)
-                (if (> thr min-adc-thr)
-                    (disable-cruise)
-                )
-            )
-        )
-
-        (let ((current-speed (* (get-speed) 3.6))) ; 255/3.3 = 77.2
-
-            {
-                (if (< thr 0)
-                    (setf thr 0))
-                (if (> thr 3.3)
-                    (setf thr 3.3))
+                (if (< throttle 0)
+                    (setf throttle 0))
+                (if (> throttle 3.3)
+                    (setf throttle 3.3))
                 (if (< brake 0)
                     (setf brake 0))
                 (if (> brake 3.3)
                     (setf brake 3.3))
-
+                
                 ; Pass through throttle and brake to VESC
-                (app-adc-override 0 thr)
+                (app-adc-override 0 throttle)
                 (app-adc-override 1 brake)
-             
-           }
-        )
-
-        (if (and (= cruise-control 1) (= unlock 1) (!= cruise-enabled 1) (> (secs-since last-throttle-updated-at-time) cruise-after-sec) (> (* (get-speed) 3.6) min-speed))
-            (enable-cruise thr)
+            }
         )
     }
 )
-
 
 (defun handle-features()
     {
@@ -259,7 +221,7 @@
             (bufset-u8 tx-frame 6 16)
             (if (= lock 1)
                 (bufset-u8 tx-frame 6 32) ; lock display
-                (if (or (> (get-temp-fet) 60) (> (get-temp-mot) 60)) ; temp icon will show up above 60 degree
+                (if (or (> (get-temp-fet) vesc-high-temp) (> (get-temp-mot) mot-high-temp)) ; temp icon
                     (bufset-u8 tx-frame 6 (+ 128 speedmode))
                     (bufset-u8 tx-frame 6 speedmode)
                 )
@@ -365,7 +327,7 @@
         (if (>= presses 2) ; double press
             {
                 (if (> (get-adc-decoded 1) min-adc-brake) ; if brake is pressed
-                    (if (and (= secret-enabled 1) (> (get-adc-decoded 0) min-adc-throttle))
+                    (if (and (= secret-enabled 1) (> (get-adc-decoded 0) min-adc-thr))
                         {
                             (set 'unlock (bitwise-xor unlock 1))
                             (beep 1 2) ; beep 2x
@@ -547,7 +509,7 @@
 
 ; Apply mode on start-up
 (apply-mode)
-(turn-on-ble)
+;(turn-on-ble)
 
 ; Spawn UART reading frames thread
 (spawn 150 read-frames)
