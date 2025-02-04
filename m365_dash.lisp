@@ -23,19 +23,19 @@
 (def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
 
 ; Speed modes (km/h, watts, current scale)
-(def eco-speed (/ 6 3.6))
+(def eco-speed (/ 16 3.6))
 (def eco-current 0.6)
-(def eco-watts 400)
+(def eco-watts 350)
 (def eco-fw 0)
 
-(def drive-speed (/ 16 3.6))
+(def drive-speed (/ 21 3.6))
 (def drive-current 0.7)
-(def drive-watts 500)
+(def drive-watts 600)
 (def drive-fw 0)
 
 (def sport-speed (/ 23 3.6))
 (def sport-current 1.0)
-(def sport-watts 700)
+(def sport-watts 800)
 (def sport-fw 0)
 
 ; Secret speed modes. To enable press the button 2 times while holding break and throttle at the same time.
@@ -54,7 +54,7 @@
 (def secret-sport-speed (/ 1000 3.6)) ; 1000 km/h easy
 (def secret-sport-current 1.0)
 (def secret-sport-watts 1500000)
-(def secret-sport-fw 10)
+(def secret-sport-fw 0)
 
 ; -> Code starts here (DO NOT CHANGE ANYTHING BELOW THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING)
 ;##################################################################################################
@@ -82,6 +82,7 @@
 (def speedmode 4)
 (def light 0)
 (def unlock 0)
+
 
 ; timeout
 ;(define last-action-time (systime))
@@ -158,34 +159,49 @@
     }
 )
 
-(defun adc-input(buffer) ; Frame 0x65
+
+
+(defun adc-input (buffer)  
     {
-        (let ((current-speed (* (get-speed) 3.6))
-            (throttle (/(bufget-u8 uart-buf 4) 77.2)) ; 255/3.3 = 77.2
-            (brake (/(bufget-u8 uart-buf 5) 77.2)))
-            {
-                (if (< throttle 0)
-                    (setf throttle 0))
-                (if (> throttle 3.3)
-                    (setf throttle 0))
-                (if (< brake 0)
-                    (setf brake 0))
-                (if (> brake 3.3)
-                    (setf brake 0))
-                (if (and (> (get-adc-decoded 1) min-adc-brake) (> (current-speed) min-speed))
-                {
-                (app-adc-override 0 0)
-                (app-adc-override 1 brake)    
-                }
-                {
-                (app-adc-override 0 throttle)
-                (app-adc-override 1 brake)
-                }
-                )
-            }
-        )
+    (var unplausible-adc-value)
+    (var current-speed (* (get-speed) 3.6))
+    (var throttle (/ (bufget-u8 uart-buf 4) 77.2))
+    (var brake (/ (bufget-u8 uart-buf 5) 77.2))
+
+    {
+      (if (< throttle 0)
+          {(setf throttle 0)
+          (setf unplausible-adc-value 1)
+          )}
+      (if (< throttle 0)
+          (setf throttle 0))
+
+      (if (> throttle 3.3)
+          (setf throttle 0))
+
+      (if (< brake 0)
+          (setf brake 0))
+
+      (if (> brake 3.3)
+          (setf brake 0)) 
     }
+
+    {
+      (if (and (> (get-adc-decoded 1) min-adc-brake)
+               (> current-speed min-speed))
+          {
+            (app-adc-override 0 0)
+            (app-adc-override 1 brake)
+          }
+          {
+            (app-adc-override 0 throttle)
+            (app-adc-override 1 brake)
+          }
+      )
+    }
+  }
 )
+
 
 (defun handle-features()
     {
