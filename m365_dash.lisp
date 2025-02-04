@@ -167,15 +167,21 @@
                 (if (< throttle 0)
                     (setf throttle 0))
                 (if (> throttle 3.3)
-                    (setf throttle 3.3))
+                    (setf throttle 0))
                 (if (< brake 0)
                     (setf brake 0))
                 (if (> brake 3.3)
-                    (setf brake 3.3))
-                
-                ; Pass through throttle and brake to VESC
+                    (setf brake 0))
+                (if (and (> (get-adc-decoded 1) min-adc-brake) (> (current-speed) min-speed))
+                {
+                (app-adc-override 0 0)
+                (app-adc-override 1 brake)    
+                }
+                {
                 (app-adc-override 0 throttle)
                 (app-adc-override 1 brake)
+                }
+                )
             }
         )
     }
