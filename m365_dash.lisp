@@ -421,6 +421,7 @@
                 (apply-mode)
                 (set 'off 1) ; turn off
                 (set 'light 0) ; turn off light
+                (set 'speedmode 4)
                 (beep 2 1) ; beep feedback
             }
         )
