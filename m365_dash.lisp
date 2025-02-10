@@ -94,7 +94,11 @@
 (def cruise-after-sec 5)
 (def cruise-dead-zone 0.1)
 (def cruise-enabled 0)
-(def thr 0)
+;(def thr 0)
+
+;adc faults
+(def unplausible-adc-throttle 0)
+(def unplausible-adc-brake 0)
 
 ; Sound feedback
 (def feedback 0)
@@ -161,34 +165,37 @@
 
 
 
-(defun adc-input (buffer)  
-    {
-    (var unplausible-adc-value)
-    (var current-speed (* (get-speed) 3.6))
-    (var throttle (/ (bufget-u8 uart-buf 4) 77.2))
-    (var brake (/ (bufget-u8 uart-buf 5) 77.2))
+(defun adc-input (buffer)
+  {
+          (var current-spd (* (get-speed) 3.6))  
+          (var throttle (/ (bufget-u8 uart-buf 4) 77.2))
+          (var brake (/ (bufget-u8 uart-buf 5) 77.2))
 
-    {
-      (if (< throttle 0)
-          {(setf throttle 0)
-          (setf unplausible-adc-value 1)
-          )}
-      (if (< throttle 0)
-          (setf throttle 0))
+      ;plausibility for throttle and brake
+      (if (or (< throttle 0.4) (> throttle 2.8))
+          {
+            (setvar 'unplausible-adc-throttle 1)
+          })
 
-      (if (> throttle 3.3)
-          (setf throttle 0))
+      (if (or (< brake 0.4) (> brake 2.8))
+          {
+            (setvar 'unplausible-adc-brake 1)
+          })
 
-      (if (< brake 0)
-          (setf brake 0))
+      ;overflow handling throttle and brake
+      (if (or (< throttle 0) (> throttle 3.3))
+          {
+            (setvar 'throttle 0)
+          })
 
-      (if (> brake 3.3)
-          (setf brake 0)) 
-    }
+      (if (or (< brake 0) (> brake 3.3))
+          {
+            (setvar 'brake 0)
+          })
 
-    {
+      ;set throttle to zero if brake is pressed
       (if (and (> (get-adc-decoded 1) min-adc-brake)
-               (> current-speed min-speed))
+               (> current-spd min-speed))
           {
             (app-adc-override 0 0)
             (app-adc-override 1 brake)
@@ -196,16 +203,15 @@
           {
             (app-adc-override 0 throttle)
             (app-adc-override 1 brake)
-          }
-      )
-    }
+          })
   }
 )
 
 
+
 (defun handle-features()
     {
-        (if (or (or (= off 1) (= lock 1) (< (* (get-speed) 3.6) min-speed)))
+         (if (or (= off 1) (= lock 1) (< (* (get-speed) 3.6) min-speed))
             (if (not (app-is-output-disabled)) ; Disable output when scooter is turned off
                 {
                     (app-adc-override 0 0)
@@ -282,7 +288,22 @@
         )
         
         ; error field
+        
         (bufset-u8 tx-frame 11 (get-fault))
+                
+        
+        (if (= unplausible-adc-throttle 1)
+            {
+                (bufset-u8 tx-frame 11 14)
+                (setvar 'unplausible-adc-throttle 0)
+             })
+            
+        (if (= unplausible-adc-brake 1)
+            {
+                (bufset-u8 tx-frame 11 15)
+                (setvar 'unplausible-adc-brake 0)
+             })         
+        
 
         ; calc crc
         (var crc 0)
