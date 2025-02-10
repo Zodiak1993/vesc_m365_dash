@@ -174,23 +174,23 @@
       ;plausibility for throttle and brake
       (if (or (< throttle 0.4) (> throttle 2.8))
           {
-            (setvar 'unplausible-adc-throttle 1)
+            (set 'unplausible-adc-throttle 1)
           })
 
       (if (or (< brake 0.4) (> brake 2.8))
           {
-            (setvar 'unplausible-adc-brake 1)
+            (set 'unplausible-adc-brake 1)
           })
 
       ;overflow handling throttle and brake
       (if (or (< throttle 0) (> throttle 3.3))
           {
-            (setvar 'throttle 0)
+            (set 'throttle 0)
           })
 
       (if (or (< brake 0) (> brake 3.3))
           {
-            (setvar 'brake 0)
+            (set 'brake 0)
           })
 
       ;set throttle to zero if brake is pressed
@@ -295,13 +295,13 @@
         (if (= unplausible-adc-throttle 1)
             {
                 (bufset-u8 tx-frame 11 14)
-                (setvar 'unplausible-adc-throttle 0)
+                (set 'unplausible-adc-throttle 0)
              })
             
         (if (= unplausible-adc-brake 1)
             {
                 (bufset-u8 tx-frame 11 15)
-                (setvar 'unplausible-adc-brake 0)
+                (set 'unplausible-adc-brake 0)
              })         
         
 
