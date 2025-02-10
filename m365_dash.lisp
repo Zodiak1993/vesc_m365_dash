@@ -39,8 +39,8 @@
 (def sport-watts 800)
 (def sport-fw 0)
 
-; Secret speed modes. To enable press the button 2 times while holding break and throttle at the same time.
-; Press throttle and brake fully at standstill to disable the secret mode
+; Secret speed modes. To enable press the button 2 times while holding brake (10%-90%) and throttle (10%-90%) at the same time.
+; Press throttle and brake fully! at standstill to disable the secret mode
 (def secret-enabled 1)
 
 (def secret-eco-speed (/ 27 3.6))
