@@ -5,24 +5,25 @@
 
 
 ; -> User parameters (change these to your needs)
-(def software-adc 1)
-(def debounce-time 0.025)
+(def software-adc 1)                  ;if set to "1" than software adc is enabled - if set to "0" hardware adc is enabled
+(def debounce-time (/ 25 1000.0))     ;debounce time in ms (here 25 ms, original 50 ms)
+(def speed-factor 1)                  ;set this value to "1" for km/h and "0.62" for mph - this only affects the displayed speed!
 
-(def min-adc-thr 0.1)
-(def max-adc-thr 0.9)
+(def min-adc-throttle 0.1)            ;no need to change this value
+(def max-adc-throttle 0.9)            ;no need to change this value
 
-(def min-adc-brake 0.1)
-(def max-adc-brake 0.9)
+(def min-adc-brake 0.1)               ;no need to change this value
+(def max-adc-brake 0.9)               ;no need to change this value
 
-(def vesc-high-temp 85)
-(def mot-high-temp 120)
+(def vesc-high-temp 85)               ;set upper limit for controller temperature warning
+(def mot-high-temp 120)               ;set upper limit for motor temperature warning
 
-(def show-batt-in-idle 1)
-(def cruise-control 1)
-(def min-speed 1)
-(def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
+(def show-batt-in-idle 1)             ;set to "1" to show battery percentage in idle
+(def cruise-control 1)                ;***********implementation following************
+(def min-speed 1)                     ;minimum speed to "activate" the motor 
+(def button-safety-speed (/ 0.1 3.6)) ;disabling button above 0.1 km/h (due to safety reasons)
 
-; Speed modes (km/h, watts, current scale)
+; Speed modes (always km/h and not mph!, watts, current scale)
 (def eco-speed (/ 16 3.6))
 (def eco-current 0.6)
 (def eco-watts 350)
@@ -39,6 +40,7 @@
 (def sport-fw 0)
 
 ; Secret speed modes. To enable press the button 2 times while holding break and throttle at the same time.
+; Press throttle and brake fully at standstill to disable the secret mode
 (def secret-enabled 1)
 
 (def secret-eco-speed (/ 27 3.6))
@@ -204,6 +206,14 @@
             (app-adc-override 0 throttle)
             (app-adc-override 1 brake)
           })
+      
+      ;disables secret mode when throttle and brake is pressed fully!   
+      (if (and (> (get-adc-decoded 1) max-adc-brake) (> (get-adc-decoded 0) max-adc-throttle))
+            {
+            (set 'unlock 0)
+            (apply-mode) 
+            }
+      )
   }
 )
 
@@ -282,9 +292,9 @@
         ; speed field
         (if (= (+ show-batt-in-idle unlock) 2)
             (if (> current-speed 1)
-                (bufset-u8 tx-frame 10 current-speed)
+                (bufset-u8 tx-frame 10 (* current-speed speed-factor))
                 (bufset-u8 tx-frame 10 battery))
-            (bufset-u8 tx-frame 10 current-speed)
+            (bufset-u8 tx-frame 10 (* current-speed speed-factor))
         )
         
         ; error field
@@ -369,11 +379,11 @@
         )
         (if (>= presses 2) ; double press
             {
-                (if (> (get-adc-decoded 1) min-adc-brake) ; if brake is pressed
-                    (if (and (= secret-enabled 1) (> (get-adc-decoded 0) min-adc-thr))
+                (if (and (> (get-adc-decoded 1) min-adc-brake) (< (get-adc-decoded 1) max-adc-brake)) ; if brake is pressed
+                    (if (and (= secret-enabled 1) (= unlock 0) (> (get-adc-decoded 0) min-adc-throttle) (< (get-adc-decoded 0) max-adc-throttle))
                         {
-                            (set 'unlock (bitwise-xor unlock 1))
-                            (beep 1 2) ; beep 2x
+                            (beep 1 2)               ; beep 2x 
+                            (set 'unlock 1)
                             (apply-mode)
                         }
                         {
