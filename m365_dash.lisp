@@ -23,11 +23,11 @@
 (def min-speed 1)                     ; minimum speed to "activate" the motor 
 (def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
 
-; Speed modes (always km/h and not mph!, watts, current scale)
-(def eco-speed (/ 16 3.6))
-(def eco-current 0.6)
-(def eco-watts 350)
-(def eco-fw 0)
+; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
+(def eco-speed (/ 16 3.6))            ; maximum speed in km/h - in this example 16 km/h
+(def eco-current 0.6)                 ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the max current defined
+(def eco-watts 350)                   ;
+(def eco-fw 0)                        ; maximum field weakening current - in this example 0 A 
 
 (def drive-speed (/ 21 3.6))
 (def drive-current 0.7)
