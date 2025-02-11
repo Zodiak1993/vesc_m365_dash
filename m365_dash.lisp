@@ -208,9 +208,10 @@
           })
       
       ;disables secret mode when throttle and brake is pressed fully!   
-      (if (and (> (get-adc-decoded 1) max-adc-brake) (> (get-adc-decoded 0) max-adc-throttle))
+      (if (and (= unlock 1) (> (get-adc-decoded 1) max-adc-brake) (> (get-adc-decoded 0) max-adc-throttle))
             {
             (set 'unlock 0)
+            (set 'speedmode 4)
             (apply-mode) 
             }
       )
@@ -560,10 +561,8 @@
     }
 )
 
-
 ; Apply mode on start-up
 (apply-mode)
-;(turn-on-ble)
 
 ; Spawn UART reading frames thread
 (spawn 150 read-frames)
