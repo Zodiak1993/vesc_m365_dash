@@ -20,12 +20,12 @@
 
 (def show-batt-in-idle 1)             ; set to "1" to show battery percentage in idle
 (def cruise-control 1)                ; ***********implementation following************
-(def min-speed 1)                     ; minimum speed to "activate" the motor 
+(def min-speed 1)                     ; minimum speed to "activate" the motor - if set to zero you are not able to leave secret mode, because brake overrides throttle value!  
 (def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
 (def eco-speed (/ 16 3.6))            ; maximum speed in km/h - in this example 16 km/h
-(def eco-current 0.6)                 ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the max current defined
+(def eco-current 0.6)                 ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
 (def eco-watts 350)                   ;
 (def eco-fw 0)                        ; maximum field weakening current - in this example 0 A 
 
@@ -239,7 +239,7 @@
         (if (= lock 1)
             {
                 (set-current-rel 0) ; No current input when locked
-                (if (> (abs (* (get-speed) 3.6)) min-speed)
+                (if (> (abs (* (get-speed) 3.6)) 0.1)
                     (set-brake-rel 1) ; Full power brake
                     (set-brake-rel 0) ; No brake
                 )
@@ -277,7 +277,7 @@
         
         ; beep field
         (if (= lock 1)
-            (if (> (abs current-speed) min-speed)
+            (if (> (abs current-speed) 0.1)
                 (bufset-u8 tx-frame 9 1) ; beep lock
                 (bufset-u8 tx-frame 9 0))
             (if (> feedback 0)
