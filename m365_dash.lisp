@@ -24,12 +24,12 @@
 (def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
-(def eco-speed (/ 16 3.6))            ; maximum speed in km/h - in this example 16 km/h
+(def eco-speed (/ 7 3.6))            ; maximum speed in km/h - in this example 16 km/h
 (def eco-current 0.6)                 ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
 (def eco-watts 350)                   ;
 (def eco-fw 0)                        ; maximum field weakening current - in this example 0 A 
 
-(def drive-speed (/ 21 3.6))
+(def drive-speed (/ 16 3.6))
 (def drive-current 0.7)
 (def drive-watts 600)
 (def drive-fw 0)
@@ -293,11 +293,12 @@
         ; speed field
         (if (= (+ show-batt-in-idle unlock) 2)
             (if (> current-speed 1)
-                (bufset-u8 tx-frame 10 (* current-speed speed-factor))
+                (bufset-u8 tx-frame 10 (round (* current-speed speed-factor)))
                 (bufset-u8 tx-frame 10 battery))
-            (bufset-u8 tx-frame 10 (* current-speed speed-factor))
+            (bufset-u8 tx-frame 10 (round (* current-speed speed-factor)))
         )
-        
+
+
         ; error field
         
         (bufset-u8 tx-frame 11 (get-fault))
