@@ -19,8 +19,8 @@
 (def mot-high-temp 120)                   ; set limit for motor temperature warning (degree)
 
 (def show-batt-in-idle 1)                 ; set to "1" to show battery percentage in idle
-(def cruise-control 1)                    ; ***********implementation following************
-(def min-speed 1)                         ; minimum speed to "activate" the motor 
+(def cruise-control 0)                    ; ***********implementation following************
+(def min-speed 0)                         ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
 (def button-safety-speed (/ 0.1 3.6))     ; disabling button above 0.1 km/h (due to safety reasons)
 
 
@@ -224,7 +224,7 @@
 
 (defun handle-features()
     {
-         (if (or (= off 1) (= lock 1) (<= (* (get-speed) 3.6) min-speed))
+         (if (or (= off 1) (= lock 1) (<= (+ 0.0001 (* (get-speed) 3.6)) min-speed)) ; +0.0001 to deal with negative zero value...
             (if (not (app-is-output-disabled)) ; Disable output when scooter is turned off
                 {
                     (app-adc-override 0 0)
