@@ -20,7 +20,7 @@
 
 (def show-batt-in-idle 1)             ; set to "1" to show battery percentage in idle
 (def cruise-control 1)                ; ***********implementation following************
-(def min-speed 1)                     ; minimum speed to "activate" the motor - if set to zero you are not able to leave secret mode, because brake overrides throttle value!  
+(def min-speed 1)                     ; minimum speed to "activate" the motor 
 (def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
@@ -197,7 +197,7 @@
 
       ;set throttle to zero if brake is pressed
       (if (and (> (get-adc-decoded 1) min-adc-brake)
-               (> current-spd min-speed))
+               (> current-spd 1))
           {
             (app-adc-override 0 0)
             (app-adc-override 1 brake)
@@ -222,7 +222,7 @@
 
 (defun handle-features()
     {
-         (if (or (= off 1) (= lock 1) (< (* (get-speed) 3.6) min-speed))
+         (if (or (= off 1) (= lock 1) (<= (* (get-speed) 3.6) min-speed))
             (if (not (app-is-output-disabled)) ; Disable output when scooter is turned off
                 {
                     (app-adc-override 0 0)
@@ -253,7 +253,7 @@
 (defun update-dash(buffer) ; Frame 0x64
     {
         (var current-speed (* (l-speed) 3.6))
-        (var battery (*(get-batt) 100))
+        (var battery (round (*(get-batt) 100)))
 
         ; mode field (1=drive, 2=eco, 4=sport, 8=charge, 16=off, 32=lock)
         (if (= off 1)
