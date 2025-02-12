@@ -5,29 +5,30 @@
 
 
 ; -> User parameters (change these to your needs)
-(def software-adc 1)                  ; if set to "1" than software adc is enabled - if set to "0" hardware adc is enabled
-(def debounce-time (/ 25 1000.0))     ; debounce time in ms (here 25 ms, original 50 ms)
-(def speed-factor 1)                  ; set this value to "1" for km/h and "0.62" for mph - this only affects the displayed speed!
+(def software-adc 1)                      ; if set to "1" than software adc is enabled - if set to "0" hardware adc is enabled
+(def debounce-time (/ 25 1000.0))         ; debounce time in ms (here 25 ms, original 50 ms)
+(def speed-factor 1)                      ; set this value to "1" for km/h and "0.62" for mph - this only affects the displayed speed!
 
-(def min-adc-throttle 0.1)            ; no need to change this value
-(def max-adc-throttle 0.9)            ; no need to change this value
+(def min-adc-throttle 0.1)                ; no need to change this value
+(def max-adc-throttle 0.9)                ; no need to change this value
 
-(def min-adc-brake 0.1)               ; no need to change this value
-(def max-adc-brake 0.9)               ; no need to change this value
+(def min-adc-brake 0.1)                   ; no need to change this value
+(def max-adc-brake 0.9)                   ; no need to change this value
 
 (def vesc-high-temp 85)               ; set limit for controller temperature warning (degree)
-(def mot-high-temp 120)               ; set limit for motor temperature warning (degree)
+(def mot-high-temp 120)                   ; set limit for motor temperature warning (degree)
 
-(def show-batt-in-idle 1)             ; set to "1" to show battery percentage in idle
-(def cruise-control 1)                ; ***********implementation following************
-(def min-speed 1)                     ; minimum speed to "activate" the motor 
-(def button-safety-speed (/ 0.1 3.6)) ; disabling button above 0.1 km/h (due to safety reasons)
+(def show-batt-in-idle 1)                 ; set to "1" to show battery percentage in idle
+(def cruise-control 1)                    ; ***********implementation following************
+(def min-speed 1)                         ; minimum speed to "activate" the motor 
+(def button-safety-speed (/ 0.1 3.6))     ; disabling button above 0.1 km/h (due to safety reasons)
+
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
-(def eco-speed (/ 7 3.6))            ; maximum speed in km/h - in this example 16 km/h
-(def eco-current 0.6)                 ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
-(def eco-watts 350)                   ;
-(def eco-fw 0)                        ; maximum field weakening current - in this example 0 A 
+(def eco-speed (/ 7 3.6))                 ; maximum speed in km/h - in this example 16 km/h
+(def eco-current 0.6)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
+(def eco-watts 350)                       ;
+(def eco-fw 0)                            ; maximum field weakening current - in this example 0 A 
 
 (def drive-speed (/ 16 3.6))
 (def drive-current 0.7)
@@ -39,8 +40,9 @@
 (def sport-watts 800)
 (def sport-fw 0)
 
-; Secret speed modes. To enable press the button 2 times while holding brake (10%-90%) and throttle (10%-90%) at the same time.
-; Press throttle and brake fully! at standstill to disable the secret mode
+
+; Secret speed modes. To enable press the button 2 times while holding brake (between 10%-90%) and throttle (between 10%-90%) at the same time.
+; Press throttle and brake fully at standstill (< 1 km/h) to disable the secret mode!
 (def secret-enabled 1)
 
 (def secret-eco-speed (/ 27 3.6))
