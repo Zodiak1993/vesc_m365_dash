@@ -15,7 +15,7 @@
 (def min-adc-brake 0.1)                   ; no need to change this value
 (def max-adc-brake 0.9)                   ; no need to change this value
 
-(def vesc-high-temp 85)               ; set limit for controller temperature warning (degree)
+(def vesc-high-temp 85)                   ; set limit for controller temperature warning (degree)
 (def mot-high-temp 120)                   ; set limit for motor temperature warning (degree)
 
 (def show-batt-in-idle 1)                 ; set to "1" to show battery percentage in idle
