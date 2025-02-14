@@ -20,7 +20,7 @@
 
 (def show-batt-in-idle 1)                 ; set to "1" to show battery percentage in idle
 (def cruise-control 0)                    ; ***********implementation following************
-(def min-speed 0)                         ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
+(def min-speed 1)                         ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
 (def button-safety-speed (/ 0.1 3.6))     ; disabling button above 0.1 km/h (due to safety reasons)
 
 
