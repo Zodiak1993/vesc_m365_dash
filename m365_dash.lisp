@@ -22,7 +22,7 @@
 (def cruise-control 0)                    ; ***********implementation following************
 (def min-speed 1)                         ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
 (def button-safety-speed (/ 0.1 3.6))     ; disabling button above 0.1 km/h (due to safety reasons)
-
+(def taillight-brightness 1)              ; 0.0 to 1.0 - 1.0 max brightness
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
 (def eco-speed (/ 7 3.6))                 ; maximum speed in km/h - in this example 16 km/h
@@ -108,6 +108,9 @@
 (def feedback 0)
 (def beep-time 1)
 
+;taillight
+(pwm-start 200 0)
+
 (if (= software-adc 1)
     (app-adc-detach 3 1)
     (app-adc-detach 3 0)
@@ -161,6 +164,7 @@
                 (apply-mode)
                 (set 'off 1) ; turn off
                 (set 'light 0) ; turn off light
+                (pwm-set-duty 0.0) ; turn off taillight
                 (beep 2 1) ; beep feedback
             }
         )
@@ -312,7 +316,7 @@
                 (set 'unplausible-adc-throttle 0)
              })
             
-        (if (= unplausible-adc-brake 1)
+        (if (= unplausible-adc-brake 2)
             {
                 (bufset-u8 tx-frame 11 15)
                 (set 'unplausible-adc-brake 0)
@@ -379,6 +383,10 @@
                 (if (= lock 0)
                     (set 'light (bitwise-xor light 1)) ; toggle light
                 )
+                (if (= light 1)
+                     (pwm-set-duty taillight-brightness)
+                     (pwm-set-duty 0.0)
+                )
             }
         )
         (if (>= presses 2) ; double press
@@ -415,22 +423,6 @@
     )
 )
 
-
-(defun shut-down-ble()
-    {
-        (if (= (+ lock off) 0) ; it is locked and off?
-            {
-                (app-adc-override 3 0) ; disable cruise button
-                (set 'unlock 0) ; Disable unlock on turn off
-                (apply-mode)
-                (set 'off 1) ; turn off
-                (set 'light 0) ; turn off light
-                (set 'speedmode 4)
-                (beep 2 1) ; beep feedback
-            }
-        )
-    }
-)
 
 
 (defun reset-button()
