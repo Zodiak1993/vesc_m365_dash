@@ -22,7 +22,7 @@
 (def cruise-control 0)                    ; ***********implementation following************
 (def min-speed 1)                         ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
 (def button-safety-speed (/ 0.1 3.6))     ; disabling button above 0.1 km/h (due to safety reasons)
-(def taillight-brightness 1)              ; 0.0 to 1.0 - 1.0 max brightness
+(def taillight-brightness 0.5)            ; taillight brightness 0.0 to 1.0 - 1.0 max brightness
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
 (def eco-speed (/ 7 3.6))                 ; maximum speed in km/h - in this example 16 km/h
