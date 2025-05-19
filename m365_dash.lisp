@@ -19,10 +19,10 @@
 (def mot-high-temp 97)                    ; set limit for motor temperature warning (degree)
 
 (def show-batt-in-idle 1)                 ; set to "1" to show battery percentage in idle
-(def cruise-control 0)                    ; ***********implementation following************
 (def min-speed 1)                         ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
 (def button-safety-speed (/ 0.1 3.6))     ; disabling button above 0.1 km/h (due to safety reasons)
 (def taillight-brightness 0.40)           ; taillight brightness 0.0 to 1.0 - 1.0 max brightness
+
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
 (def eco-speed (/ 7 3.6))                 ; maximum speed in km/h - in this example 16 km/h
@@ -87,19 +87,6 @@
 (def light 0)
 (def unlock 0)
 
-
-; timeout
-;(define last-action-time (systime))
-
-;cruise
-(def last-throttle-updated-at-time (systime))
-(def last-throttle-dead-min 0)
-(def last-throttle-dead-max 0)
-(def cruise-after-sec 5)
-(def cruise-dead-zone 0.1)
-(def cruise-enabled 0)
-;(def thr 0)
-
 ;adc faults
 (def unplausible-adc-throttle 0)
 (def unplausible-adc-brake 0)
@@ -116,6 +103,7 @@
     (app-adc-detach 3 0)
 )
 
+
 (defun beep(time count)
     {
         (set 'beep-time time)
@@ -123,31 +111,12 @@
     }
 )
 
-(defun disable-cruise()
-    (if (= cruise-enabled 1)
-        {
-            (setvar 'cruise-enabled 0)
-            (app-adc-override 3 0)
-        }
-    )
-)
-
-(defun enable-cruise(thr)
-    (if (> (get-speed) min-speed)
-        {
-            (setvar 'cruise-enabled 1)
-            (app-adc-override 3 thr)
-            (beep 2 2)
-        }
-    )
-)
-
 
 (defun turn-on-ble()
     {
-        (app-adc-override 3 0) ; disable cruise button
         (set 'off 0) ; turn on
         (beep 1 1)
+        (set 'speedmode 4) ; set mode to sport
         (set 'unlock 0) ; Disable unlock on turn off
         (apply-mode) ; Apply mode on start-up
         (stats-reset) ; reset stats when turning on
@@ -159,7 +128,6 @@
     {
         (if (= (+ lock off) 0) ; it is locked and off?
             {
-                (app-adc-override 3 0) ; disable cruise button
                 (set 'unlock 0) ; Disable unlock on turn off
                 (apply-mode)
                 (set 'off 1) ; turn off
