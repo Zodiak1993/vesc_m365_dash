@@ -1,5 +1,5 @@
 # VESC M365 Dash
-Allows you to connect your XIAOMI display to VESC controller.
+Allows you to connect your XIAOMI display to VESC controller. Code is working for 3 months and 1000km without problems - still use at your own risk!
 
 # My Changes
 
@@ -22,7 +22,6 @@ Allows you to connect your XIAOMI display to VESC controller.
 # Upcoming Tasks
 
 - Implement cruise control.
-- Code formatting / comments minor / bug fixes (my code is working for 3 months / 1000 km without problems!) 
 
 
 ## How
