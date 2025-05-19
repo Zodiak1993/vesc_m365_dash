@@ -7,7 +7,7 @@
 ; -> User parameters (change these to your needs)
 ; ==============================================================================================================================
 (def software-adc 1)                      ; if set to "1" than software adc is enabled - if set to "0" hardware adc is enabled
-(def debounce-time (/ 30 1000.0))         ; debounce time in ms (here 25 ms, original 50 ms)
+(def debounce-time (/ 30 1000.0))         ; debounce time in ms (here 30 ms, original 50 ms)
 (def speed-factor 1)                      ; set this value to "1" for km/h and "0.62" for mph - this only affects the displayed speed!
 
 (def min-adc-throttle 0.1)                ; no need to change this value
@@ -53,12 +53,12 @@
 (def secret-eco-watts 5000)
 (def secret-eco-fw 0)
 
-(def secret-drive-speed (/ 1000 3.6))
+(def secret-drive-speed (/ 100 3.6))
 (def secret-drive-current 1.0)
 (def secret-drive-watts 5000)
 (def secret-drive-fw 0)
 
-(def secret-sport-speed (/ 1000 3.6)) ; 1000 km/h easy
+(def secret-sport-speed (/ 100 3.6)) ; 100 km/h easy
 (def secret-sport-current 1.0)
 (def secret-sport-watts 5000)
 (def secret-sport-fw 30.0)
