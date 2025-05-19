@@ -6,7 +6,7 @@
 
 ; -> User parameters (change these to your needs)
 (def software-adc 1)                      ; if set to "1" than software adc is enabled - if set to "0" hardware adc is enabled
-(def debounce-time (/ 25 1000.0))         ; debounce time in ms (here 25 ms, original 50 ms)
+(def debounce-time (/ 30 1000.0))         ; debounce time in ms (here 25 ms, original 50 ms)
 (def speed-factor 1)                      ; set this value to "1" for km/h and "0.62" for mph - this only affects the displayed speed!
 
 (def min-adc-throttle 0.1)                ; no need to change this value
@@ -15,18 +15,18 @@
 (def min-adc-brake 0.1)                   ; no need to change this value
 (def max-adc-brake 0.9)                   ; no need to change this value
 
-(def vesc-high-temp 85)                   ; set limit for controller temperature warning (degree)
-(def mot-high-temp 120)                   ; set limit for motor temperature warning (degree)
+(def vesc-high-temp 56)                   ; set limit for controller temperature warning (degree)
+(def mot-high-temp 97)                    ; set limit for motor temperature warning (degree)
 
 (def show-batt-in-idle 1)                 ; set to "1" to show battery percentage in idle
 (def cruise-control 0)                    ; ***********implementation following************
 (def min-speed 1)                         ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
 (def button-safety-speed (/ 0.1 3.6))     ; disabling button above 0.1 km/h (due to safety reasons)
-(def taillight-brightness 0.5)            ; taillight brightness 0.0 to 1.0 - 1.0 max brightness
+(def taillight-brightness 0.40)           ; taillight brightness 0.0 to 1.0 - 1.0 max brightness
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
 (def eco-speed (/ 7 3.6))                 ; maximum speed in km/h - in this example 16 km/h
-(def eco-current 0.6)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
+(def eco-current 0.5)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
 (def eco-watts 350)                       ;
 (def eco-fw 0)                            ; maximum field weakening current - in this example 0 A 
 
@@ -35,9 +35,9 @@
 (def drive-watts 600)
 (def drive-fw 0)
 
-(def sport-speed (/ 23 3.6))
-(def sport-current 1.0)
-(def sport-watts 800)
+(def sport-speed (/ 22.5 3.6))
+(def sport-current 0.8)
+(def sport-watts 900)
 (def sport-fw 0)
 
 
@@ -45,20 +45,20 @@
 ; Press throttle and brake fully at standstill (< 1 km/h) to disable the secret mode!
 (def secret-enabled 1)
 
-(def secret-eco-speed (/ 27 3.6))
-(def secret-eco-current 0.8)
-(def secret-eco-watts 1200)
+(def secret-eco-speed (/ 28 3.6))
+(def secret-eco-current 0.7)
+(def secret-eco-watts 5000)
 (def secret-eco-fw 0)
 
-(def secret-drive-speed (/ 47 3.6))
-(def secret-drive-current 0.9)
-(def secret-drive-watts 1500)
+(def secret-drive-speed (/ 1000 3.6))
+(def secret-drive-current 1.0)
+(def secret-drive-watts 5000)
 (def secret-drive-fw 0)
 
 (def secret-sport-speed (/ 1000 3.6)) ; 1000 km/h easy
 (def secret-sport-current 1.0)
-(def secret-sport-watts 1500000)
-(def secret-sport-fw 0)
+(def secret-sport-watts 5000)
+(def secret-sport-fw 30.0)
 
 ; -> Code starts here (DO NOT CHANGE ANYTHING BELOW THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING)
 ;##################################################################################################
@@ -399,8 +399,6 @@
                             (apply-mode)
                         }
                         {
-                            (set 'unlock 0)
-                            (apply-mode)
                             (set 'lock (bitwise-xor lock 1)) ; lock on or off
                             (beep 1 1) ; beep feedback
                         }
