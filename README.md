@@ -3,22 +3,24 @@ Allows you to connect your XIAOMI display to VESC controller.
 
 # My Changes
 
-Debounce Time (25ms) as a variable, because double key presses were almost not detected in the original dashboard.
-Motor Temp and Mosfet Temp warning limits as variables, making them easy to change.
-The light can no longer be turned on or off in the Lock Mode.
-Lock Mode: The scooter now also brakes and beeps when pushed backward.
-When the brake and gas are applied simultaneously, the gas is set to 0. Previously, for example, 100% gas and 50% brake would result in 50% gas.
-Plausibility check for gas and brake (detecting disconnection of the brake or gas must be detected; Errors 14 & 15 on the dashboard).
-Start Secret Mode when the brake is between 10% and 90% AND the gas is between 10% and 90% AND a double-click on the button!
-Exit Secret Mode when the brake and gas are fully "pressed" simultaneously while standing still.
-mph Mode (speed-factor)
-After turning off the dashboard, the last mode is not used, but the Sport Mode is set when turning on (logic like the original).
-Added a few comments to the code.
+- [x] Debounce Time (25ms) as a variable, because double key presses were almost not detected in the original dashboard.
+- [x] Motor Temp and Mosfet Temp warning limits as variables, making them easy to change.
+- [x] The light can no longer be turned on or off in the Lock Mode.
+- [x] Lock Mode: The scooter now also brakes and beeps when pushed backward.
+- [x] When the brake and gas are applied simultaneously, the gas is set to 0. Previously, for example, 100% gas and 50% brake would result in 50% gas.
+- [x] Plausibility check for gas and brake (detecting disconnection of the brake or gas must be detected; Errors 14 & 15 on the dashboard).
+- [x] Start Secret Mode when the brake is between 10% and 90% AND the gas is between 10% and 90% AND a double-click on the button!
+- [x] Exit Secret Mode when the brake and gas are fully "pressed" simultaneously while standing still.
+- [x] mph Mode (speed-factor)
+- [x] After turning off the dashboard, the last mode is not used, but the Sport Mode is set when turning on (logic like the original).
+- [x] Added a few comments to the code.
+
+  
 Upcoming Tasks:
 
-Control the taillight with a MOSFET via the servo pin.
-Implement cruise control.
-Code formatting / minor bug fixes / comments.
+- [x]Control the taillight with a MOSFET via the servo pin.
+- [x]Implement cruise control.
+- [x]Code formatting / minor bug fixes / comments.
 
 
 ## How
