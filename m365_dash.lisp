@@ -3,8 +3,9 @@
 ; Tested on VESC 6.05 using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
 ; Edited by Zodiak: Thanks to AKA13, 1zuna and sharkboy for original script!
 
-
+; ==============================================================================================================================
 ; -> User parameters (change these to your needs)
+; ==============================================================================================================================
 (def software-adc 1)                      ; if set to "1" than software adc is enabled - if set to "0" hardware adc is enabled
 (def debounce-time (/ 30 1000.0))         ; debounce time in ms (here 25 ms, original 50 ms)
 (def speed-factor 1)                      ; set this value to "1" for km/h and "0.62" for mph - this only affects the displayed speed!
@@ -24,6 +25,7 @@
 (def taillight-brightness 0.40)           ; taillight brightness 0.0 to 1.0 - 1.0 max brightness
 
 
+
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
 (def eco-speed (/ 7 3.6))                 ; maximum speed in km/h - in this example 16 km/h
 (def eco-current 0.5)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
@@ -39,6 +41,7 @@
 (def sport-current 0.8)
 (def sport-watts 900)
 (def sport-fw 0)
+
 
 
 ; Secret speed modes. To enable press the button 2 times while holding brake (between 10%-90%) and throttle (between 10%-90%) at the same time.
@@ -60,8 +63,10 @@
 (def secret-sport-watts 5000)
 (def secret-sport-fw 30.0)
 
+
+; ==============================================================================================================================
 ; -> Code starts here (DO NOT CHANGE ANYTHING BELOW THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING)
-;##################################################################################################
+; ==============================================================================================================================
 
 ; Load VESC CAN code serer
 (import "pkg@://vesc_packages/lib_code_server/code_server.vescpkg" 'code-server)
