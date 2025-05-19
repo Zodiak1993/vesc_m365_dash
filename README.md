@@ -3,7 +3,7 @@ Allows you to connect your XIAOMI display to VESC controller.
 
 # My Changes
 
-- [x] Debounce Time (25ms) as a variable, because double key presses were almost not detected in the original dashboard.
+- [x] Debounce Time (25ms) as a variable, because double key presses were almost not detected with my original m365 dashboard.
 - [x] Motor Temp and Mosfet Temp warning limits as variables, making them easy to change.
 - [x] The light can no longer be turned on or off in the Lock Mode.
 - [x] Lock Mode: The scooter now also brakes and beeps when pushed backward.
