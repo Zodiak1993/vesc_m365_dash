@@ -21,7 +21,7 @@ Allows you to connect your XIAOMI display to VESC controller. Code is working fo
   
 # Upcoming Tasks
 
-- Implement cruise control.
+- [ ]Implement cruise control.
 
 
 ## How
