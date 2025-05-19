@@ -14,13 +14,15 @@ Allows you to connect your XIAOMI display to VESC controller.
 - [x] mph Mode (speed-factor)
 - [x] After turning off the dashboard, the last mode is not used, but the Sport Mode is set when turning on (logic like the original).
 - [x] Added a few comments to the code.
+- [x] Round speed value on display (before 22.9 km/h was 22 km/h - now 22.9 km/h is 23 km/h)
+- [x] If you use the lock mode, the secret mode will NOT be reset! When the Lock Mode is exited, the last used mode (sport, drive, walk) is restored.   
+- [x] Control the taillight with a MOSFET via the servo pin
 
   
-Upcoming Tasks:
+# Upcoming Tasks
 
-- [x]Control the taillight with a MOSFET via the servo pin.
-- [x]Implement cruise control.
-- [x]Code formatting / minor bug fixes / comments.
+- Implement cruise control.
+- Code formatting / comments minor / bug fixes (my code is working for 3 months / 1000 km without problems!) 
 
 
 ## How
