@@ -7,7 +7,7 @@ Allows you to connect your XIAOMI display to VESC controller.
 - [x] Motor Temp and Mosfet Temp warning limits as variables, making them easy to change.
 - [x] The light can no longer be turned on or off in the Lock Mode.
 - [x] Lock Mode: The scooter now also brakes and beeps when pushed backward.
-- [x] When the brake and gas are applied simultaneously, the gas is set to 0. Previously, for example, 100% gas and 50% brake would result in 50% gas.
+- [x] When the brake & gas are applied simultaneously, the gas is set to 0. Previously, for example, 100% gas & 50% brake would result in 50% gas.
 - [x] Plausibility check for gas and brake (detecting disconnection of the brake or gas must be detected; Errors 14 & 15 on the dashboard).
 - [x] Start Secret Mode when the brake is between 10% and 90% AND the gas is between 10% and 90% AND a double-click on the button!
 - [x] Exit Secret Mode when the brake and gas are fully "pressed" simultaneously while standing still.
