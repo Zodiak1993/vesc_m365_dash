@@ -11,7 +11,7 @@ Allows you to connect your XIAOMI display to VESC controller.
 - [x] Plausibility check for gas and brake (detecting disconnection of the brake or gas must be detected; Errors 14 & 15 on the dashboard).
 - [x] Start Secret Mode when the brake is between 10% and 90% AND the gas is between 10% and 90% AND a double-click on the button!
 - [x] Exit Secret Mode when the brake and gas are fully "pressed" simultaneously while standing still.
-- [x] mph Mode (speed-factor)
+- [x] mph Mode (speed-factor) - this affects only the displayed speed on the dashboard!
 - [x] After turning off the dashboard, the last mode is not used, but the Sport Mode is set when turning on (logic like the original).
 - [x] Added a few comments to the code.
 - [x] Round speed value on display (before 22.9 km/h was 22 km/h - now 22.9 km/h is 23 km/h)
