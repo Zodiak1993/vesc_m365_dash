@@ -55,10 +55,6 @@ If you are running **VESC 6.05**, use these:
 - [x] Shutdown feature (Long press to turn off)
 - [x] Battery Idle % on Secret Sport Mode
 
-Features to be added:
-- [ ] App communication
-- [ ] More unlock combinations
-
 ## Fixed to be done
 - [x] ~~Figure out why 0x64 packets are not being read. (on my setup)~~ (Can be ignored due to the fact that we do not have to receive any 0x64 packets to sent our own 0x64 back)
 - [x] ~~Figure out why button reading is randomly~~ (can be fixed with 470R resistor between 3.3v and RX and capacitor on 3.3v+GND)
