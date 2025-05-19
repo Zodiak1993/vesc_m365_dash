@@ -16,7 +16,7 @@ Allows you to connect your XIAOMI display to VESC controller.
 - [x] Added a few comments to the code.
 - [x] Round speed value on display (before 22.9 km/h was 22 km/h - now 22.9 km/h is 23 km/h)
 - [x] If you use the lock mode, the secret mode will NOT be reset! When the Lock Mode is exited, the last used mode (sport, drive, walk) is restored.   
-- [x] Control the taillight with a MOSFET via the servo pin
+- [x] Control the taillight with a MOSFET via the servo pin (Small Sketch of a Circuit-Diagram follows...time is limited :) )
 
   
 # Upcoming Tasks
