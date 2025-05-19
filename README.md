@@ -49,12 +49,11 @@ If you are running **VESC 6.05**, use these:
 
 ## Features
 - [x] Multiple speed modes (Press twice)
-- [x] Secret speed modes (Hold throttle and brake and press twice)
+- [x] Secret speed modes (Hold throttle between 10% & 90% and brake between 10% & 90% and press button twice)
 - [x] Lock mode with beeping and braking (Press twice while holding break)
 - [x] Motor start speed feature (More secure)
 - [x] Shutdown feature (Long press to turn off)
 - [x] Battery Idle % on Secret Sport Mode
-- [x] Temperature notification icon at 60°C
 
 Features to be added:
 - [ ] App communication
