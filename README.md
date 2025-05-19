@@ -1,5 +1,25 @@
 # VESC M365 Dash
-Allows you to connect your XIAOMI or NINEBOT display to VESC controller.
+Allows you to connect your XIAOMI display to VESC controller.
+
+# My Changes
+
+Debounce Time (25ms) as a variable, because double key presses were almost not detected in the original dashboard.
+Motor Temp and Mosfet Temp warning limits as variables, making them easy to change.
+The light can no longer be turned on or off in the Lock Mode.
+Lock Mode: The scooter now also brakes and beeps when pushed backward.
+When the brake and gas are applied simultaneously, the gas is set to 0. Previously, for example, 100% gas and 50% brake would result in 50% gas.
+Plausibility check for gas and brake (detecting disconnection of the brake or gas must be detected; Errors 14 & 15 on the dashboard).
+Start Secret Mode when the brake is between 10% and 90% AND the gas is between 10% and 90% AND a double-click on the button!
+Exit Secret Mode when the brake and gas are fully "pressed" simultaneously while standing still.
+mph Mode (speed-factor)
+After turning off the dashboard, the last mode is not used, but the Sport Mode is set when turning on (logic like the original).
+Added a few comments to the code.
+Upcoming Tasks:
+
+Control the taillight with a MOSFET via the servo pin.
+Implement cruise control.
+Code formatting / minor bug fixes / comments.
+
 
 ## How
 Do you want to use your Xiaomi or NineBot BLE with a VESC controller? This is the right place for you! \
@@ -12,7 +32,6 @@ Read one of the guides below to get started.
 
 If you are running **VESC 6.05**, use these:
 - **M365**: https://github.com/m365fw/vesc_m365_dash/blob/main/m365_dash.lisp
-- **G30**: https://github.com/m365fw/vesc_m365_dash/blob/main/g30_dash.lisp
 - **How-To** Video: https://www.youtube.com/watch?v=kX8PsaxfoXQ
 
 ## How do I wire it?
