@@ -20,9 +20,7 @@ Allows you to connect your XIAOMI display to VESC controller. Code is working fo
 
   
 # Upcoming Tasks
-
-- [] Implement cruise control.
-
+- [ ] Implement cruise control.
 
 ## How
 Do you want to use your Xiaomi or NineBot BLE with a VESC controller? This is the right place for you! \
