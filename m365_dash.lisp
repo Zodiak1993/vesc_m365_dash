@@ -220,11 +220,12 @@
         (if (= lock 1)
             {
                 (set-current-rel 0) ; No current input when locked
-                (set-handbrake-rel 0.3) ; This sets an open loop current that allows to hold the motor still even at 0 speed at the cost of efficiency. 
+                (if (> (abs (* (get-speed) 3.6)) 0.1)
+                    (set-brake-rel 1) ; Full power brake
+                    (set-brake-rel 0) ; No brake
+                )
             }
         )
-    }
-)
 
 
 (defun update-dash(buffer) ; Frame 0x64
