@@ -8,7 +8,7 @@
 ; ==============================================================================================================================
 (def software-adc 1)                      ; if set to "1" than software adc is enabled - if set to "0" hardware adc is enabled
 (def debounce-time (/ 30 1000.0))         ; debounce time in ms (here 30 ms, original 50 ms)
-(def speed-factor 1)                      ; set this value to "1" for km/h and "0.62" for mph - this only affects the displayed speed!
+(def speed-factor 1)                      ; set this value to "1" for km/h and "0.62" for mph - this only affects the displayed speed on the dash!
 
 (def min-adc-throttle 0.1)                ; no need to change this value
 (def max-adc-throttle 0.9)                ; no need to change this value
