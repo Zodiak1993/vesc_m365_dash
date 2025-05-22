@@ -18,11 +18,13 @@ Code is working for 3 months and 1000km without problems - still use at your own
 - [x] Added a few comments to the code.
 - [x] Round speed value on display (before 22.9 km/h was 22 km/h - now 22.9 km/h is 23 km/h)
 - [x] If you use the lock mode, the secret mode will NOT be reset! When the Lock Mode is exited, the last used mode (sport, drive, walk) is restored.   
-- [x] Control the taillight with a MOSFET via the servo pin (Small Sketch of a Circuit-Diagram follows...time is limited :) )
+- [x] Control the taillight with a MOSFET via the servo pin.
 
   
 # Upcoming Tasks
 - [ ] Implement cruise control.
+- [ ] Little Circuit-Diagram for taillight (mosfet)
+- [ ] Use handbrake function of the vesc when the scooter is locked
 
 ## How
 Do you want to use your Xiaomi or NineBot BLE with a VESC controller? This is the right place for you! \
