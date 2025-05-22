@@ -1,7 +1,7 @@
 ; M365 dashboard compability lisp script
 ; UART Wiring: red=5V black=GND yellow=COM-TX (UART-HDX) green=COM-RX (button)+3.3V with 1K Resistor
-; Tested on VESC 6.05 and 6.06 beta using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
-; Edited by Zodiak: Thanks to 1zuna, AKA13 and sharkboy for the original script!
+; Tested on VESC 6.05 using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
+; Edited by Zodiak: Thanks to AKA13, 1zuna and sharkboy for original script!
 
 ; ==============================================================================================================================
 ; -> User parameters (change these to your needs)
@@ -62,7 +62,6 @@
 (def secret-sport-current 1.0)
 (def secret-sport-watts 5000)
 (def secret-sport-fw 30.0)
-
 
 
 ; ==============================================================================================================================
@@ -226,6 +225,8 @@
                 )
             }
         )
+    }
+)
 
 
 (defun update-dash(buffer) ; Frame 0x64
@@ -402,8 +403,9 @@
     }
 )
 
-
 ; Speed mode implementation
+
+
 (defun apply-mode()
     (if (= unlock 0)
         (if (= speedmode 1)
