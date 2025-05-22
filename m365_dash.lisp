@@ -122,7 +122,7 @@
         (set 'off 0) ; turn on
         (beep 1 1)
         (set 'speedmode 4) ; set mode to sport
-        (set 'unlock 0) ; Disable unlock on turn off
+        ;(set 'unlock 0) ; Disable unlock on turn off
         (apply-mode) ; Apply mode on start-up
         (stats-reset) ; reset stats when turning on
     }
@@ -133,8 +133,8 @@
     {
         (if (= (+ lock off) 0) ; it is locked and off?
             {
-                (set 'unlock 0) ; Disable unlock on turn off
-                (apply-mode)
+                ;(set 'unlock 0) ; Disable unlock on turn off
+                ;(apply-mode)
                 (set 'off 1) ; turn off
                 (set 'light 0) ; turn off light
                 (pwm-set-duty 0.0) ; turn off taillight
