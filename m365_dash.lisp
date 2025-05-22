@@ -1,7 +1,7 @@
 ; M365 dashboard compability lisp script
 ; UART Wiring: red=5V black=GND yellow=COM-TX (UART-HDX) green=COM-RX (button)+3.3V with 1K Resistor
-; Tested on VESC 6.05 using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
-; Edited by Zodiak: Thanks to AKA13, 1zuna and sharkboy for original script!
+; Tested on VESC 6.05 and 6.06 beta using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
+; Edited by Zodiak: Thanks to 1zuna, AKA13 and sharkboy for the original script!
 
 ; ==============================================================================================================================
 ; -> User parameters (change these to your needs)
@@ -62,6 +62,7 @@
 (def secret-sport-current 1.0)
 (def secret-sport-watts 5000)
 (def secret-sport-fw 30.0)
+
 
 
 ; ==============================================================================================================================
@@ -219,10 +220,7 @@
         (if (= lock 1)
             {
                 (set-current-rel 0) ; No current input when locked
-                (if (> (abs (* (get-speed) 3.6)) 0.1)
-                    (set-brake-rel 1) ; Full power brake
-                    (set-brake-rel 0) ; No brake
-                )
+                (set-handbrake-rel 0.3) ; This sets an open loop current that allows to hold the motor still even at 0 speed at the cost of efficiency. 
             }
         )
     }
@@ -403,9 +401,8 @@
     }
 )
 
+
 ; Speed mode implementation
-
-
 (defun apply-mode()
     (if (= unlock 0)
         (if (= speedmode 1)
