@@ -8,11 +8,11 @@ Code is working for 3 months and 1000km without problems - still use at your own
 - [x] Debounce Time (30ms) as a variable, because double key presses were almost not detected with my original m365 dashboard.
 - [x] Motor Temp and Mosfet Temp warning limits as variables, making them easy to change.
 - [x] The light can no longer be turned on or off in the Lock Mode.
-- [x] Lock Mode: The scooter now also brakes and beeps when pushed backward.
-- [x] When the brake & gas are applied simultaneously, the gas is set to 0. Previously, 100% gas & 50% brake would result in 50% gas.
-- [x] Plausibility check for gas and brake (detecting disconnection of the brake or gas must be detected; Errors 14 & 15 on the dashboard).
-- [x] Start Secret Mode when the brake is between 10% and 90% AND the gas is between 10% and 90% AND a double-click on the button!
-- [x] Exit Secret Mode when the brake and gas are fully "pressed" simultaneously while standing still.
+- [x] Lock Mode: The scooter now also brakes and beeps when being pushed backward.
+- [x] When the brake & throttle are applied simultaneously, the throttle is set to 0. Previously, 100% throttle & 50% brake would result in 50% throttle.
+- [x] Plausibility check for throttle and brake (detecting disconnection of the brake or throttle must be detected; Errors 14 & 15 on the dashboard).
+- [x] Start Secret Mode when the brake is between 10% and 90% AND the throttle is between 10% and 90% AND a double-click on the button!
+- [x] Exit Secret Mode when the brake and throttle are fully "pressed" simultaneously while standing still.
 - [x] mph Mode (speed-factor) - this affects only the displayed speed on the dashboard!
 - [x] After turning off the dashboard, the last mode is not used, but the Sport Mode is set when turning on (logic like the original).
 - [x] Added a few comments to the code.
