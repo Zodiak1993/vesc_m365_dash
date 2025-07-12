@@ -16,8 +16,8 @@
 (def min-adc-brake 0.1)                   ; no need to change this value
 (def max-adc-brake 0.9)                   ; no need to change this value
 
-(def vesc-high-temp 56)                   ; set limit for controller temperature warning (degree)
-(def mot-high-temp 97)                    ; set limit for motor temperature warning (degree)
+(def vesc-high-temp 60)                   ; set limit for controller temperature warning (degree)
+(def mot-high-temp 100)                   ; set limit for motor temperature warning (degree)
 
 (def show-batt-in-idle 1)                 ; set to "1" to show battery percentage in idle
 (def min-speed 1)                         ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
@@ -27,18 +27,18 @@
 
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
-(def eco-speed (/ 7 3.6))                 ; maximum speed in km/h - in this example 16 km/h
-(def eco-current 0.5)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
+(def eco-speed (/ 6 3.6))                 ; maximum speed in km/h - in this example 16 km/h
+(def eco-current 0.2)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
 (def eco-watts 350)                       ;
 (def eco-fw 0)                            ; maximum field weakening current - in this example 0 A 
 
 (def drive-speed (/ 16 3.6))
-(def drive-current 0.7)
+(def drive-current 0.5)
 (def drive-watts 600)
 (def drive-fw 0)
 
 (def sport-speed (/ 22.5 3.6))
-(def sport-current 0.8)
+(def sport-current 0.7)
 (def sport-watts 900)
 (def sport-fw 0)
 
@@ -61,7 +61,7 @@
 (def secret-sport-speed (/ 100 3.6)) ; 100 km/h easy
 (def secret-sport-current 1.0)
 (def secret-sport-watts 5000)
-(def secret-sport-fw 30.0)
+(def secret-sport-fw 35.0)
 
 
 ; ==============================================================================================================================
@@ -122,7 +122,6 @@
         (set 'off 0) ; turn on
         (beep 1 1)
         (set 'speedmode 4) ; set mode to sport
-        ;(set 'unlock 0) ; Disable unlock on turn off
         (apply-mode) ; Apply mode on start-up
         (stats-reset) ; reset stats when turning on
     }
@@ -133,8 +132,7 @@
     {
         (if (= (+ lock off) 0) ; it is locked and off?
             {
-                ;(set 'unlock 0) ; Disable unlock on turn off
-                ;(apply-mode)
+                (set 'unlock 0) ; Disable unlock on turn off
                 (set 'off 1) ; turn off
                 (set 'light 0) ; turn off light
                 (pwm-set-duty 0.0) ; turn off taillight
@@ -239,7 +237,7 @@
             (bufset-u8 tx-frame 6 16)
             (if (= lock 1)
                 (bufset-u8 tx-frame 6 32) ; lock display
-                (if (or (> (get-temp-fet) vesc-high-temp) (> (get-temp-mot) mot-high-temp)) ; temp icon
+                (if (or (>= (get-temp-fet) vesc-high-temp) (>= (get-temp-mot) mot-high-temp)) ; temp icon
                     (bufset-u8 tx-frame 6 (+ 128 speedmode))
                     (bufset-u8 tx-frame 6 speedmode)
                 )
