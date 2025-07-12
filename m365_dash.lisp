@@ -28,7 +28,7 @@
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
 (def eco-speed (/ 6 3.6))                 ; maximum speed in km/h - in this example 16 km/h
-(def eco-current 0.2)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
+(def eco-current 0.2)                     ; scaled maximum current, 0.0 to 1.0 - in this example 20% of the defined "motor current max"
 (def eco-watts 350)                       ;
 (def eco-fw 0)                            ; maximum field weakening current - in this example 0 A 
 
