@@ -27,8 +27,8 @@
 
 
 ; Speed modes (always km/h and not mph!, current scale, watts, field weakening)
-(def eco-speed (/ 6 3.6))                 ; maximum speed in km/h - in this example 6 km/h
-(def eco-current 0.2)                     ; scaled maximum current, 0.0 to 1.0 - in this example 20% of the defined "motor current max"
+(def eco-speed (/ 7 3.6))                 ; maximum speed in km/h - in this example 16 km/h
+(def eco-current 0.3)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
 (def eco-watts 350)                       ; maximum wattage in W - in this example 350 W
 (def eco-fw 0)                            ; maximum field weakening current - in this example 0 A 
 
@@ -61,7 +61,7 @@
 (def secret-sport-speed (/ 100 3.6)) ; 100 km/h easy
 (def secret-sport-current 1.0)
 (def secret-sport-watts 5000)
-(def secret-sport-fw 35.0)
+(def secret-sport-fw 25.0)
 
 
 ; ==============================================================================================================================
