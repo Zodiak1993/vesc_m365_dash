@@ -17,7 +17,7 @@ Code is working for 3 months and 1000km without problems - still use at your own
 - [x] After turning off the dashboard, the last mode is not used, but the sport mode is set when turning on (logic like originally).
 - [x] Added a few comments to the code.
 - [x] Round speed value on display (before 22.9 km/h was 22 km/h - now 22.9 km/h is 23 km/h)
-- [x] If you use the lock mode, the secret mode will NOT be reset! When the Lock Mode is exited, the last used mode (sport, drive, walk) is restored.   
+- [x] If you use the lock mode, the secret mode will NOT be reset! When the Lock Mode is exited, the last used mode (sport, drive, eco) is restored.   
 - [x] Control the taillight with a MOSFET via the servo pin.
 - [x] Overmodulation factor changeable for every mode (sport, drive, eco).
 
