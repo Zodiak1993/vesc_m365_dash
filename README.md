@@ -14,7 +14,7 @@ Code is working for 3 months and 1000km without problems - still use at your own
 - [x] Start Secret Mode when the brake is between 10% and 90% AND the throttle is between 10% and 90% AND a double-click on the button!
 - [x] Exit Secret Mode when the brake and throttle are fully "pressed" simultaneously while standing still.
 - [x] mph Mode (speed-factor) - this affects only the displayed speed on the dashboard!
-- [x] After turning off the dashboard, the last mode is not used, but the Sport Mode is set when turning on (logic like the original).
+- [x] After turning off the dashboard, the last mode is not used, but the sport mode is set when turning on (logic like originally).
 - [x] Added a few comments to the code.
 - [x] Round speed value on display (before 22.9 km/h was 22 km/h - now 22.9 km/h is 23 km/h)
 - [x] If you use the lock mode, the secret mode will NOT be reset! When the Lock Mode is exited, the last used mode (sport, drive, walk) is restored.   
