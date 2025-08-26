@@ -31,16 +31,19 @@
 (def eco-current 0.3)                     ; scaled maximum current, 0.0 to 1.0 - in this example 60% of the defined "motor current max"
 (def eco-watts 350)                       ; maximum wattage in W - in this example 350 W
 (def eco-fw 0)                            ; maximum field weakening current - in this example 0 A 
+(def eco-ovmfactor 1.00)                  ; overmodulation factor - max recommended 1.15  
 
 (def drive-speed (/ 16 3.6))
 (def drive-current 0.5)
 (def drive-watts 600)
 (def drive-fw 0)
+(def drive-ovmfactor 1.00)
 
 (def sport-speed (/ 22.5 3.6))
 (def sport-current 0.7)
 (def sport-watts 900)
 (def sport-fw 0)
+(def sport-ovmfactor 1.00)
 
 
 
@@ -52,16 +55,19 @@
 (def secret-eco-current 0.7)
 (def secret-eco-watts 5000)
 (def secret-eco-fw 0)
+(def secret-eco-ovmfactor 1.00)
 
 (def secret-drive-speed (/ 100 3.6))
 (def secret-drive-current 1.0)
 (def secret-drive-watts 5000)
 (def secret-drive-fw 0)
+(def secret-drive-ovmfactor 1.00)
 
 (def secret-sport-speed (/ 100 3.6)) ; 100 km/h easy
 (def secret-sport-current 1.0)
 (def secret-sport-watts 5000)
-(def secret-sport-fw 25.0)
+(def secret-sport-fw 30.0)
+(def secret-sport-ovmfactor 1.15)
 
 
 ; ==============================================================================================================================
@@ -119,10 +125,10 @@
 
 (defun turn-on-ble()
     {
-        (set 'off 0) ; turn on
-        (beep 1 1)
         (set 'speedmode 4) ; set mode to sport
         (apply-mode) ; Apply mode on start-up
+        (set 'off 0) ; turn on
+        (beep 1 1)
         (stats-reset) ; reset stats when turning on
     }
 )
@@ -136,6 +142,7 @@
                 (set 'off 1) ; turn off
                 (set 'light 0) ; turn off light
                 (pwm-set-duty 0.0) ; turn off taillight
+                (apply-mode)
                 (beep 2 1) ; beep feedback
             }
         )
@@ -407,20 +414,20 @@
 (defun apply-mode()
     (if (= unlock 0)
         (if (= speedmode 1)
-            (configure-speed drive-speed drive-watts drive-current drive-fw)
+            (configure-speed drive-speed drive-watts drive-current drive-fw drive-ovmfactor)
             (if (= speedmode 2)
-                (configure-speed eco-speed eco-watts eco-current eco-fw)
+                (configure-speed eco-speed eco-watts eco-current eco-fw eco-ovmfactor)
                 (if (= speedmode 4)
-                    (configure-speed sport-speed sport-watts sport-current sport-fw)
+                    (configure-speed sport-speed sport-watts sport-current sport-fw sport-ovmfactor)
                 )
             )
         )
         (if (= speedmode 1)
-            (configure-speed secret-drive-speed secret-drive-watts secret-drive-current secret-drive-fw)
+            (configure-speed secret-drive-speed secret-drive-watts secret-drive-current secret-drive-fw secret-drive-ovmfactor)
             (if (= speedmode 2)
-                (configure-speed secret-eco-speed secret-eco-watts secret-eco-current secret-eco-fw)
+                (configure-speed secret-eco-speed secret-eco-watts secret-eco-current secret-eco-fw secret-eco-ovmfactor)
                 (if (= speedmode 4)
-                    (configure-speed secret-sport-speed secret-sport-watts secret-sport-current secret-sport-fw)
+                    (configure-speed secret-sport-speed secret-sport-watts secret-sport-current secret-sport-fw secret-sport-ovmfactor)
                 )
             )
         )
@@ -428,12 +435,13 @@
 )
 
 
-(defun configure-speed(speed watts current fw)
+(defun configure-speed(speed watts current fw ovm)
     {
         (set-param 'max-speed speed)
         (set-param 'l-watt-max watts)
         (set-param 'l-current-max-scale current)
         (set-param 'foc-fw-current-max fw)
+        (set-param 'foc-overmod-factor ovm)
     }
 )
 
