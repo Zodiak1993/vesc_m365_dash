@@ -1,6 +1,6 @@
 ; M365 dashboard compability lisp script
 ; UART Wiring: red=5V black=GND yellow=COM-TX (UART-HDX) green=COM-RX (button)+3.3V with 1K Resistor
-; Tested on VESC 6.05 using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
+; Tested on VESC 6.06 using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
 ; Edited by Zodiak: Thanks to AKA13, 1zuna and sharkboy for original script!
 
 ; ==============================================================================================================================
