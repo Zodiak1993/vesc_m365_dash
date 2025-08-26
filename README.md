@@ -1,4 +1,4 @@
-# VESC M365 Dash
+# VESC M365 Dash - only for vesc firmware 6.06!
 
 Allows you to connect your XIAOMI display to VESC controller. \
 Code is working for 3 months and 1000km without problems - still use at your own risk!!!
