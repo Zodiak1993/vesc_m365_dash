@@ -98,6 +98,8 @@
 (def light 0)
 (def unlock 0)
 (def prevbatt 0)
+(def bms_active 0)
+(def battery 0)
 
 ;adc faults
 (def unplausible-adc-throttle 0)
@@ -238,12 +240,10 @@
 (defun update-dash(buffer) ; Frame 0x64
     {
         (var current-speed (* (l-speed) 3.6))
-        (var battery (round (* (get-bms-val 'bms-soc) 100)))        
-
-        (if (and (= battery 0) (> prevbatt 1))
-            (set 'battery prevbatt)  ; use previous value if the drop to 0 is unrealistic
-            (set 'prevbatt battery)  ; update previous value normally
-        )
+        
+        (if (> (get-bms-val 'bms-soc) 0) (set 'bms_active 1))
+        (set 'battery (round (* (if (= bms_active 1) (get-bms-val 'bms-soc) (get-batt)) 100)))
+        (if (and (= battery 0) (> prevbatt 1)) (set 'battery prevbatt) (set 'prevbatt battery))
 
         ; mode field (1=drive, 2=eco, 4=sport, 8=charge, 16=off, 32=lock)
         (if (= off 1)
