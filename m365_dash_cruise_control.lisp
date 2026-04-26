@@ -2,6 +2,7 @@
 ; UART Wiring: red=5V black=GND yellow=COM-TX (UART-HDX) green=COM-RX (button)+3.3V with 1K Resistor
 ; Tested on VESC 6.06 using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
 ; Edited by Zodiak: Thanks to AKA13, 1zuna and sharkboy for original script!
+; wenn lock shutdown (1 Stunde) unterdrücken.
 ; ==============================================================================================================================
 ; -> User parameters (change these to your needs)
 ; ==============================================================================================================================
@@ -24,7 +25,7 @@
 (def min-speed 1.0)                       ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
 (def button-safety-speed 0.1)             ; disabling button above 0.1 km/h (due to safety reasons)
 (def taillight-brightness 0.30)           ; taillight brightness 0.0 to 1.0 - 1.0 max brightness
-(def brakelight-offset 0.70)              ; brakelight offset (taillight(0.30) + offset(0.70)) = brakelight (1.00)) /// set to 0.00 if you want to disable brakelight!
+(def brakelight-offset 0.00)              ; brakelight offset (taillight(0.30) + offset(0.70)) = brakelight (1.00)) /// set to 0.00 if you want to disable brakelight!
 
 ; Speed modes eco/drive/sport (always km/h and not mph!, current scale, watts, field weakening, overmodulation)
 
@@ -114,7 +115,7 @@
     (app-adc-detach 2 1))                                                                  ; detach buttons
     
 (if (= software-adc 1)                                                                     ; detach buttons and ADC                                                                    
-    (app-adc-detach 3 1))                                                                  ; detach ADC 
+    (app-adc-detach 3 1))                                                                                                                                          ; detach ADC 
 ;==================================================================================================================================================
 
 (defun beep (time count)                                                                   ; beep routine
@@ -147,8 +148,8 @@
 ;==================================================================================================================================================
 
 (defun adc-input (buffer)                                                                  ; Frame 0x65
-    (let ((throttle (/ (bufget-u8 uart-buf 4) 77.3))                                       ; 255/3.3 = 77.3
-          (brake    (/ (bufget-u8 uart-buf 5) 77.3)))                                      ; 255/3.3 = 77.3
+    (let ((throttle (/ (bufget-u8 uart-buf 4) 77.3))                                       ; 255/3.3 = 77.3 ???? auf buffer umschreiben?
+          (brake    (/ (bufget-u8 uart-buf 5) 77.3)))                                      ; 255/3.3 = 77.3 ???? auf buffer umschreiben
     (progn                                                 
       (if (< throttle 0)   (setf throttle 0))                                              ; clamp low
       (if (> throttle 3.3) (setf throttle 0))                                              ; clamp high
@@ -280,6 +281,9 @@
                 (if (or (>= (get-temp-fet) vesc-high-temp) (>= (get-temp-mot) mot-high-temp) (= bat_temp_warning 1))       ; temp icon
                     (bufset-u8 tx-frame 6 (+ 128 speedmode))
                     (bufset-u8 tx-frame 6 speedmode))))
+        
+        (if (= use-mph 1)
+            (bufset-u8 tx-frame 6 (+ (bufget-u8 tx-frame 6) 64)))    
         
         (bufset-u8 tx-frame 7 battery)                                                                                     ; batt field
 
