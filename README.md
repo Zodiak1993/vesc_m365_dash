@@ -11,15 +11,17 @@ Code is working for 12 months and 3000 km without problems - still use at your o
 - [x] Plausibility check for throttle and brake (detecting disconnection of the brake or throttle must be detected; Errors 14 & 15 on the dashboard).
 - [x] Start Secret Mode when the brake is between 10% and 90% AND the throttle is between 10% and 90% AND a double-click on the button!
 - [x] Exit Secret Mode when the brake and throttle are fully "pressed" simultaneously while standing still.
-- [x] mph Mode (speed-factor) - this affects only the displayed speed on the dashboard!
+- [x] mph mode - this affects only the displayed speed on the dashboard!
 - [x] After turning off the dashboard, the last mode is not used, but the sport mode is set when turning on (logic like originally).
 - [x] Added a few comments to the code.
 - [x] Round speed value on display (before 22.9 km/h was 22 km/h - now 22.9 km/h is 23 km/h)
 - [x] If you use the lock mode, the secret mode will NOT be reset! When the Lock Mode is exited, the last used mode (sport, drive, eco) is restored.   
 - [x] Control the taillight with a MOSFET via the servo pin.
-- [x] Brake light can be activated
+- [x] Brake light (brightness is adjustable - also this function can be disabled)
 - [x] Overmodulation factor changeable for every mode (sport, drive, eco).
-- [x] Implement cruise control.
+- [x] alternative software debounce for button
+- [x] Implement cruise control (Cruise control is activated via a throttle gesture sequence: release → full throttle → release → full throttle → release (all within a short time window while and only in secret mode!).
+      Do not forget to activate cruise control in vesc tool itself! (APP Settings → ADC → Button Inputs → Enable Cruise Control)
 
   
 # Upcoming Tasks
