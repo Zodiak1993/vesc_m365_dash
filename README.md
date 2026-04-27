@@ -1,15 +1,13 @@
 # VESC M365 Dash - only for vesc firmware 6.06!
 
 Allows you to connect your XIAOMI display to VESC controller. \
-Code is working for 3 months and 1000km without problems - still use at your own risk!!!
+Code is working for 12 months and 3000 km without problems - still use at your own risk!!!
 
 # My Changes
 
-- [x] Debounce Time (30ms) as a variable, because double key presses were almost not detected with my original m365 dashboard.
 - [x] Motor Temp and Mosfet Temp warning limits as variables, making them easy to change.
 - [x] The light can no longer be turned on or off in the Lock Mode.
 - [x] Lock Mode: The scooter now also brakes and beeps when being pushed backward.
-- [x] When the brake & throttle are applied simultaneously, the throttle is set to 0. Previously, 100% throttle & 50% brake would result in 50% throttle.
 - [x] Plausibility check for throttle and brake (detecting disconnection of the brake or throttle must be detected; Errors 14 & 15 on the dashboard).
 - [x] Start Secret Mode when the brake is between 10% and 90% AND the throttle is between 10% and 90% AND a double-click on the button!
 - [x] Exit Secret Mode when the brake and throttle are fully "pressed" simultaneously while standing still.
@@ -19,11 +17,12 @@ Code is working for 3 months and 1000km without problems - still use at your own
 - [x] Round speed value on display (before 22.9 km/h was 22 km/h - now 22.9 km/h is 23 km/h)
 - [x] If you use the lock mode, the secret mode will NOT be reset! When the Lock Mode is exited, the last used mode (sport, drive, eco) is restored.   
 - [x] Control the taillight with a MOSFET via the servo pin.
+- [x] Brake light can be activated
 - [x] Overmodulation factor changeable for every mode (sport, drive, eco).
+- [x] Implement cruise control.
 
   
 # Upcoming Tasks
-- [ ] Implement cruise control.
 - [ ] Little Circuit-Diagram for taillight (mosfet)
 
 
