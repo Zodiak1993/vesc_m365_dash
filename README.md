@@ -21,7 +21,7 @@ Code is working for 12 months and 3000 km without problems - still use at your o
 - [x] Overmodulation factor changeable for every mode (sport, drive, eco).
 - [x] If a VESC BMS is available, its reported SOC is used as the battery percentage (includes temperature warning above 50 °C or below 0 °C).
 - [x] alternative software debounce for the button
-- [x] Implement cruise control (Cruise control is activated via a throttle gesture sequence: release → full throttle → release → full throttle → release (all within a short time window while and only in secret mode!).
+- [x] Implement cruise control (Cruise control is activated via a throttle gesture sequence: release → full throttle → release → full throttle → release (all within a short time window and only in secret mode!).
       Do not forget to activate cruise control in vesc tool itself! (APP Settings → ADC → Button Inputs → Enable Cruise Control)
 
   
