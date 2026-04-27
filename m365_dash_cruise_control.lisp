@@ -149,7 +149,9 @@
 (defun adc-input (buffer)                                                                  ; Frame 0x65
     (let ((throttle (/ (bufget-u8 uart-buf 4) 77.3))                                       ; 255/3.3 = 77.3 ???? auf buffer umschreiben?
           (brake    (/ (bufget-u8 uart-buf 5) 77.3)))                                      ; 255/3.3 = 77.3 ???? auf buffer umschreiben
-    (progn                                                 
+    (progn
+      (set 'unplausible-adc-throttle (if (or (< throttle 0.4) (> throttle 2.8)) 1 0))
+      (set 'unplausible-adc-brake (if (or (< brake 0.4) (> brake 2.8)) 1 0))
       (if (< throttle 0)   (setf throttle 0))                                              ; clamp low
       (if (> throttle 3.3) (setf throttle 0))                                              ; clamp high
       (if (< brake 0)      (setf brake 0))                                                 ; clamp low
@@ -222,9 +224,11 @@
     
     (if (= cruise-control 1)
         (cruise-control-logic thr brake speed-kmh now))
-
-    (set 'unplausible-adc-throttle (if (let ((v (get-adc 0))) (or (< v 0.4) (> v 2.8))) 1 0))          ; plausibility check for throttle (ADC voltage 1 outside the valid range of 0.4V to 2.8V)
-    (set 'unplausible-adc-brake    (if (let ((v (get-adc 1))) (or (< v 0.4) (> v 2.8))) 1 0))          ; plausibility check for brake    (Adc voltage 1 outside the valid range of 0.4V and 2.8V)       
+   
+    (if (= software-adc 0)
+        (progn
+        (set 'unplausible-adc-throttle (if (let ((v (get-adc 0))) (or (< v 0.4) (> v 2.8))) 1 0))
+        (set 'unplausible-adc-brake    (if (let ((v (get-adc 1))) (or (< v 0.4) (> v 2.8))) 1 0))))    ; plausibility check for brake    (Adc voltage 1 outside the valid range of 0.4V and 2.8V)       
           
     (if (and (> brake min-adc-brake) (> brakelight-offset 0) (= lock 0) (= off 0))                     ; taillight & brakelight logic
         (pwm-set-duty (if (> (+ taillight-brightness brakelight-offset) 1.0)
