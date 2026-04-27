@@ -7,7 +7,7 @@ Code is working for 12 months and 3000 km without problems - still use at your o
 
 - [x] Motor Temp and Mosfet Temp warning limits as variables, making them easy to change.
 - [x] The light can no longer be turned on or off in the Lock Mode.
-- [x] Lock Mode: The scooter now also brakes and beeps when being pushed backward.
+- [x] Lock Mode: The scooter now also beeps when being pushed backwards.
 - [x] Plausibility check for throttle and brake (detecting disconnection of the brake or throttle must be detected; Errors 14 & 15 on the dashboard).
 - [x] Start Secret Mode when the brake is between 10% and 90% AND the throttle is between 10% and 90% AND a double-click on the button!
 - [x] Exit Secret Mode when the brake and throttle are fully "pressed" simultaneously while standing still.
@@ -19,13 +19,14 @@ Code is working for 12 months and 3000 km without problems - still use at your o
 - [x] Control the taillight with a MOSFET via the servo pin.
 - [x] Brake light (brightness is adjustable - also this function can be disabled)
 - [x] Overmodulation factor changeable for every mode (sport, drive, eco).
-- [x] alternative software debounce for button
+- [x] alternative software debounce for the button
 - [x] Implement cruise control (Cruise control is activated via a throttle gesture sequence: release → full throttle → release → full throttle → release (all within a short time window while and only in secret mode!).
       Do not forget to activate cruise control in vesc tool itself! (APP Settings → ADC → Button Inputs → Enable Cruise Control)
 
   
 # Upcoming Tasks
 - [ ] Little Circuit-Diagram for taillight (mosfet)
+- [ ] No Shutdown when beeing locked (VESC will shut down after X time of inactivity)
 
 
 ## How
