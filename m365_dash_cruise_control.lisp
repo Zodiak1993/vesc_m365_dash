@@ -491,7 +491,7 @@
     (if (= software-adc 1)                                      ; detach buttons and ADC                                                                    
     	(app-adc-detach 3 1))   
 
-        (apply-mode)                                            ; Apply mode on start-up
+    (apply-mode)                                                ; Apply mode on start-up
 	(spawn 150 read-frames)                                     ; Spawn UART reading frames thread
 	(button-logic)))                                            ; Start button logic in main thread - this will block the main thread
 
