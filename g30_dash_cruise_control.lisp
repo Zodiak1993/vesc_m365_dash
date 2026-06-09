@@ -5,6 +5,7 @@
 ; -> User parameters (change these to your needs)
 ; ==============================================================================================================================
 
+
 (def software-adc 1)                      ; if set to "1" than software adc is enabled - if set to "0" hardware adc is enabled
 
 (def min-adc-thr 0.1)                     ; no need to change this value
