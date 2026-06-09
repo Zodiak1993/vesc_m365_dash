@@ -1,6 +1,6 @@
 # VESC M365 Dash - only for vesc firmware 7.00 / 6.06 !
 
-Allows you to connect your XIAOMI display to VESC controller. \
+Allows you to connect your XIAOMI or Ninebot display to VESC controller. \
 Code is working for 12 months and 3000 km without problems - still use at your own risk!!!
 
 # My Changes
