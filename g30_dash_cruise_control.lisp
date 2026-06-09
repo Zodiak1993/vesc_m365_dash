@@ -76,15 +76,6 @@
 (import "pkg@://vesc_packages/lib_code_server/code_server.vescpkg" 'code-server)           ; load VESC CAN code server
 (read-eval-program code-server)
 
-(uart-start 115200 'half-duplex)
-(gpio-configure 'pin-rx 'pin-mode-in-pu)
-(define tx-frame (array-create 15))
-(bufset-u16 tx-frame 0 0x5AA5) ;Ninebot protocol
-(bufset-u8 tx-frame 2 0x06) ;Payload length is 5 bytes
-(bufset-u16 tx-frame 3 0x2021) ; Packet is from ESC to BLE
-(bufset-u16 tx-frame 5 0x6400) ; Packet is from ESC to BLE
-(def uart-buf (array-create 64))
-
 (def presstime (systime))                                                                  ; button handling
 (def presses 0)
 
@@ -108,13 +99,6 @@
 (def feedback 0)                                                                           ; sound feedback
 (def beep-time 0)                                                                          
 
-(pwm-start 200 0)                                                                          ; taillight start pwm (200Hz / 0% duty)
-
-(if (= cruise-control 1)
-    (app-adc-detach 2 1))                                                                  ; detach buttons
-    
-(if (= software-adc 1)                                                                     ; detach buttons and ADC                                                                    
-    (app-adc-detach 3 1))                                                                                                                                          ; detach ADC 
 ;==================================================================================================================================================
 
 (defun beep (time count)                                                                   ; beep routine
@@ -163,10 +147,10 @@
 
 (defun cruise-control-logic (thr brake speed-kmh now)
   (progn
-    (if (and (> cruise-seq-state 0) (> (secs-since cruise-seq-timer) cruise-seq-time))    ; Timer expired ? reset sequence
+    (if (and (> cruise-seq-state 0) (> (secs-since cruise-seq-timer) cruise-seq-time))                      ; Timer expired ? reset sequence
         (set 'cruise-seq-state 0))
 
-    (if (and (= cruise-enabled 0) (= secret 1) (> speed-kmh 3) (> (secs-since last-cruise-activated-at) 5))    ; requires at least 5s since the last activation to prevent rapid re-triggers
+    (if (and (= cruise-enabled 0) (= secret 1) (> speed-kmh 3) (> (secs-since last-cruise-activated-at) 5)) ; requires at least 5s since the last activation to prevent rapid re-triggers
         (progn
           (if (= cruise-seq-state 0)
               (if (< thr min-adc-thr)
@@ -197,7 +181,7 @@
                     (set 'last-cruise-activated-at now)
                     (set 'cruise-seq-state 0))))))
 
-    (if (or (> thr min-adc-thr) (> brake min-adc-brake))     ; Disable cruise if throttle or brake is pressed
+    (if (or (> thr min-adc-thr) (> brake min-adc-brake))                                                    ; Disable cruise if throttle or brake is pressed
         (progn
           (set 'cruise-enabled 0)
           (app-adc-override 3 0)))
@@ -205,10 +189,10 @@
     ;; Beep logic
     (if (and (= cruise-enabled 1) (= cruise-beep-done 0) (> (secs-since last-cruise-activated-at) 0.2))
         (progn
-          (beep 2 3)                                         ; beep 0.2s after cruise control activation, if you play around with throttle you are fine now ...
+          (beep 2 3)                                                                                        ; beep 0.2s after cruise control activation, if you play around with throttle you are fine now ...
           (set 'cruise-beep-done 1)))
 
-    (if (and (= cruise-enabled 0)(= cruise-beep-done 1))     ; abort any pending cruise beep immediately when cruise control is disabled
+    (if (and (= cruise-enabled 0)(= cruise-beep-done 1))                                                    ; abort any pending cruise beep immediately when cruise control is disabled
         (progn
           (beep 0 0)
           (set 'cruise-beep-done 0)))))
@@ -506,6 +490,29 @@
 
 ;==================================================================================================================================================
 
-(apply-mode)                                                    ; Apply mode on start-up
-(spawn 150 read-frames)                                         ; Spawn UART reading frames thread
-(button-logic)                                                  ; Start button logic in main thread - this will block the main threadmaybe :)
+(defun main ()
+  (progn
+    (uart-start 115200 'half-duplex)                            ; packet handling                  
+    (gpio-configure 'pin-rx 'pin-mode-in-pu)
+    (pwm-start 200 0)  						                    ; taillight start pwm (200Hz / 0% duty)
+    (define tx-frame (array-create 15))
+    (bufset-u16 tx-frame 0 0x5AA5) ;Ninebot protocol
+    (bufset-u8 tx-frame 2 0x06) ;Payload length is 5 bytes
+    (bufset-u16 tx-frame 3 0x2021) ; Packet is from ESC to BLE
+    (bufset-u16 tx-frame 5 0x6400) ; Packet is from ESC to BLE
+    (def uart-buf (array-create 64))
+
+    (if (= cruise-control 1)
+    	(app-adc-detach 2 1))                                   ; detach buttons
+    
+    (if (= software-adc 1)                                      ; detach buttons and ADC                                                                    
+    	(app-adc-detach 3 1))   
+
+    (apply-mode)                                                ; Apply mode on start-up
+	(spawn 150 read-frames)                                     ; Spawn UART reading frames thread
+	(button-logic)))                                            ; Start button logic in main thread - this will block the main thread
+
+;==================================================================================================================================================
+
+(image-save)
+(main)
