@@ -1,6 +1,6 @@
 ; M365 dashboard compability lisp script
 ; UART Wiring: red=5V black=GND yellow=COM-TX (UART-HDX) green=COM-RX (button)+3.3V with 1K Resistor
-; Tested on VESC 6.06 using M365 BLE (version 1.3.6) with spintend ubox Lite 100 100
+; Tested on VESC 7.00 using M365 BLE (version 1.3.6) with spintend Ubox Lite 100 100
 ; Edited by Zodiak: Thanks to AKA13, 1zuna and sharkboy for original script!
 ; ==============================================================================================================================
 ; -> User parameters (change these to your needs)
@@ -22,7 +22,7 @@
 (def use-mph 0)                           ; set this value to "1" for mph and "0" for km/h - this only affects the displayed speed on the dash!
 (def show-bat-in-idle 1)                  ; set to "1" to show battery percentage in idle (only in secret mode)
 (def min-speed 1.0)                       ; minimum speed in km/h to "activate" the motor, you can also set this to "0"
-(def button-safety-speed 0.1)             ; disabling button above 0.1 km/h (due to safety reasons)
+(def button-safety-speed 1.0)             ; disabling button above 0.1 km/h (due to safety reasons)
 (def taillight-brightness 0.30)           ; taillight brightness 0.0 to 1.0 - 1.0 max brightness
 (def brakelight-offset 0.00)              ; brakelight offset (taillight(0.30) + offset(0.70)) = brakelight (1.00)) /// set to 0.00 if you want to disable brakelight!
 
@@ -77,14 +77,6 @@
 (import "pkg@://vesc_packages/lib_code_server/code_server.vescpkg" 'code-server)           ; load VESC CAN code server
 (read-eval-program code-server)
 
-(uart-start 115200 'half-duplex)                                                           ; packet handling                  
-(gpio-configure 'pin-rx 'pin-mode-in-pu)
-(def tx-frame (array-create 14))
-(bufset-u16 tx-frame 0 0x55AA)
-(bufset-u16 tx-frame 2 0x0821)
-(bufset-u16 tx-frame 4 0x6400)
-(def uart-buf (array-create 64))
-
 (def presstime (systime))                                                                  ; button handling
 (def presses 0)
 
@@ -107,14 +99,7 @@
 
 (def feedback 0)                                                                           ; sound feedback
 (def beep-time 0)                                                                          
-
-(pwm-start 200 0)                                                                          ; taillight start pwm (200Hz / 0% duty)
-
-(if (= cruise-control 1)
-    (app-adc-detach 2 1))                                                                  ; detach buttons
-    
-(if (= software-adc 1)                                                                     ; detach buttons and ADC                                                                    
-    (app-adc-detach 3 1))                                                                                                                                          ; detach ADC 
+                                                                                                                                        
 ;==================================================================================================================================================
 
 (defun beep (time count)                                                                   ; beep routine
@@ -147,8 +132,8 @@
 ;==================================================================================================================================================
 
 (defun adc-input (buffer)                                                                  ; Frame 0x65
-    (let ((throttle (/ (bufget-u8 uart-buf 4) 77.3))                                       ; 255/3.3 = 77.3 ???? auf buffer umschreiben?
-          (brake    (/ (bufget-u8 uart-buf 5) 77.3)))                                      ; 255/3.3 = 77.3 ???? auf buffer umschreiben
+    (let ((throttle (/ (bufget-u8 uart-buf 4) 77.3))                                       ; 255/3.3 = 77.3
+          (brake    (/ (bufget-u8 uart-buf 5) 77.3)))                                      ; 255/3.3 = 77.3
     (progn
       (set 'unplausible-adc-throttle (if (or (< throttle 0.4) (> throttle 2.8)) 1 0))
       (set 'unplausible-adc-brake (if (or (< brake 0.4) (> brake 2.8)) 1 0))
@@ -163,10 +148,10 @@
 
 (defun cruise-control-logic (thr brake speed-kmh now)
   (progn
-    (if (and (> cruise-seq-state 0) (> (secs-since cruise-seq-timer) cruise-seq-time))    ; Timer expired ? reset sequence
+    (if (and (> cruise-seq-state 0) (> (secs-since cruise-seq-timer) cruise-seq-time))                      ; Timer expired ? reset sequence
         (set 'cruise-seq-state 0))
 
-    (if (and (= cruise-enabled 0) (= secret 1) (> speed-kmh 3) (> (secs-since last-cruise-activated-at) 5))    ; requires at least 5s since the last activation to prevent rapid re-triggers
+    (if (and (= cruise-enabled 0) (= secret 1) (> speed-kmh 3) (> (secs-since last-cruise-activated-at) 5)) ; requires at least 5s since the last activation to prevent rapid re-triggers
         (progn
           (if (= cruise-seq-state 0)
               (if (< thr min-adc-thr)
@@ -197,7 +182,7 @@
                     (set 'last-cruise-activated-at now)
                     (set 'cruise-seq-state 0))))))
 
-    (if (or (> thr min-adc-thr) (> brake min-adc-brake))     ; Disable cruise if throttle or brake is pressed
+    (if (or (> thr min-adc-thr) (> brake min-adc-brake))                                                    ; Disable cruise if throttle or brake is pressed
         (progn
           (set 'cruise-enabled 0)
           (app-adc-override 3 0)))
@@ -205,10 +190,10 @@
     ;; Beep logic
     (if (and (= cruise-enabled 1) (= cruise-beep-done 0) (> (secs-since last-cruise-activated-at) 0.2))
         (progn
-          (beep 2 3)                                         ; beep 0.2s after cruise control activation, if you play around with throttle you are fine now ...
+          (beep 2 3)                                                                                        ; beep 0.2s after cruise control activation, if you play around with throttle you are fine now ...
           (set 'cruise-beep-done 1)))
 
-    (if (and (= cruise-enabled 0)(= cruise-beep-done 1))     ; abort any pending cruise beep immediately when cruise control is disabled
+    (if (and (= cruise-enabled 0)(= cruise-beep-done 1))                                                    ; abort any pending cruise beep immediately when cruise control is disabled
         (progn
           (beep 0 0)
           (set 'cruise-beep-done 0)))))
@@ -489,6 +474,28 @@
 
 ;==================================================================================================================================================
 
-(apply-mode)                                                    ; Apply mode on start-up
-(spawn 150 read-frames)                                         ; Spawn UART reading frames thread
-(button-logic)                                                  ; Start button logic in main thread - this will block the main thread
+(defun main ()
+  (progn
+    (uart-start 115200 'half-duplex)                            ; packet handling                  
+    (gpio-configure 'pin-rx 'pin-mode-in-pu)
+    (pwm-start 200 0)  						                    ; taillight start pwm (200Hz / 0% duty)
+    (def tx-frame (array-create 14))
+    (bufset-u16 tx-frame 0 0x55AA)
+    (bufset-u16 tx-frame 2 0x0821)
+    (bufset-u16 tx-frame 4 0x6400)
+    (def uart-buf (array-create 64))
+
+    (if (= cruise-control 1)
+    	(app-adc-detach 2 1))                                   ; detach buttons
+    
+    (if (= software-adc 1)                                      ; detach buttons and ADC                                                                    
+    	(app-adc-detach 3 1))   
+
+        (apply-mode)                                            ; Apply mode on start-up
+	(spawn 150 read-frames)                                     ; Spawn UART reading frames thread
+	(button-logic)))                                            ; Start button logic in main thread - this will block the main thread
+
+;==================================================================================================================================================
+
+(image-save)
+(main)
