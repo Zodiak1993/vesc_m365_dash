@@ -55,7 +55,7 @@ If you are running **VESC 6.05**, use these:
 
 ## How do I wire the taillight?
 ![image](guide/imgs/taillight.jpg)
-
+For anyone assuming the gate resistor was forgotten — it wasn’t. Every VESC I’ve tested already includes a 220 Ω resistor :)
 
 ## Features
 - [x] Multiple speed modes (Press twice)
