@@ -53,6 +53,10 @@ If you are running **VESC 6.05**, use these:
 
 ![image](guide/imgs/23999.png)
 
+## How do I wire the taillight?
+![image](guide/imgs/taillight.jpg)
+
+
 ## Features
 - [x] Multiple speed modes (Press twice)
 - [x] Secret speed modes (Hold throttle between 10% & 90% and brake between 10% & 90% and press button twice)
