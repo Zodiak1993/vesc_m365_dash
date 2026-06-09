@@ -24,10 +24,10 @@ Code is working for 12 months and 3000 km without problems - still use at your o
 - [x] Implement cruise control (Cruise control is activated via a throttle gesture sequence: release → full throttle → release → full throttle → release (all within a short time window and only in secret mode!).
       To deactivate cruise control press brake or throttle.
       Do not forget to activate cruise control in vesc tool itself! (APP Settings → ADC → Button Inputs → Enable Cruise Control)
+- [x] Little Circuit-Diagram for taillight (mosfet) - scroll down for the circuit.
 
   
 # Upcoming Tasks
-- [ ] Little Circuit-Diagram for taillight (mosfet)
 - [ ] No Shutdown when beeing locked (VESC will shut down after X time of inactivity)
 
 
